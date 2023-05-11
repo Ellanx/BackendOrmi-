@@ -11379,6 +11379,8 @@ print(type('abc')) # <class 'str'>
 
 - enumerate( ) : 값에 순위를 매기고 싶을 때 사용합니다.
 - range( )
+- sorted( )
+- reversed( )
 - filter( )
 - zip( )
 - map( )
@@ -11670,22 +11672,3434 @@ list(map(lambda x : x ** 2, [1, 2, 3, 4]))
 
 
 ```python
-import matplotlib.pyplot as plt
-
-gender = [70, 30]
-gender_label = ['male','female']
-plt.pie(gender, labels=gender_label, autopct='%.1f%%', counterclock=False)
-plt.show()
+# 질문 : 람다함수를 재귀로 사용할 수 있나요?
+# 답 : Yes
+fact = lambda x: 1 if x == 0 else x * fact(x-1)
+fact(5)
 ```
 
 
-    
-![png](aa_files/aa_769_0.png)
-    
 
 
-## 데코레이터
+    120
+
+
+
+
+```python
+# 질문 : i와 j가 뜻하는 바
+# 답 : 
+skill = [
+        ('고기잡이', 100, 'SS'),
+        ('고기팔기', 120, 'SSS'),
+        ('낚시', 5, 'C'),
+        ('통발', 5, 'C'),
+        ('큰그물', 5, 'C')
+]
+
+for i, j in enumerate(skill, 100):
+    print(i, j)
+
+for idx, item in enumerate(skill, 100):
+    print(idx, item)
+```
+
+    100 ('고기잡이', 100, 'SS')
+    101 ('고기팔기', 120, 'SSS')
+    102 ('낚시', 5, 'C')
+    103 ('통발', 5, 'C')
+    104 ('큰그물', 5, 'C')
+
+
+
+```python
+data = [i for i in range(len(숫자))]
+data
+```
+
+
+
+
+    [0, 1, 2, 3, 4]
+
+
+
+
+```python
+[i for i in data]
+[i[0] ** i[1] for i in data]
+```
+
+
+
+
+    [1, 4, 9, 64, 125]
+
+
+
+
+```python
+숫자 = [1, 2, 3, 4, 5]
+승수 = [2, 2, 2, 3, 3]
+
+#문제
+#1. 숫자의 승수를 zip으로 맵핑해서 진행하세요.
+#2. 숫자를 승수만큼 제곱하여 결과값을 표현해주세요.
+#3. 승수한 값이 100이상인 값을 출력하세요.
+#4. 승수한 값을 모두 더하세요.
+
+# Q1
+# Q1.1
+data = list(zip(숫자, 승수))
+
+# Q1.2 (list comprehension)
+data = [i for i in range(len(숫자))]
+###
+data = [(숫자[i], 승수[i]) for i in range(len(숫자))]
+data
+
+
+# Q2
+# Q2.1
+l = []
+for i in data:
+    l.append(i[0] ** i[1])
+print(l)
+
+# Q2.2
+def f(x):
+    return x[0] ** x[1]
+
+print(list(map(f, data)))
+
+# Q2.3
+print(list(map(lambda x:x[0] ** x[1], data)))
+
+# Q2.4
+print(list(map(lambda x:pow(x[0], x[1]), data)))
+
+# Q2.5 (list comprehension)
+[i for i in data]
+[i[0] ** i[1] for i in data] # 공간을 바로 할당해버립니다.
+
+# Q3
+# Q3.1
+l = []
+for i in map(lambda x:x[0] ** x[1], data):
+    if i >= 100:
+        l.append(i)
+print(l)
+
+# Q3.2
+def f(x):
+    return x > 100
+data2 = map(lambda x:x[0] ** x[1], data)
+print(list(filter(f, data2)))
+
+# Q3.3
+data2 = map(lambda x:x[0] ** x[1], data)
+print(list(filter(lambda x:x>=100, data2)))
+
+# Q3.4
+# list(filter(lambda x:x>=100, [1, 4, 9, 64, 125]))
+print(list(filter(lambda x:x>=100, map(lambda x:x[0] ** x[1], data))))
+
+# Q3.5
+print([i[0] ** i[1] for i in data if i[0] ** i[1] >= 100])
+
+# Q4
+sum(map(lambda x:x[0] ** x[1], data))
+```
+
+    [1, 4, 9, 64, 125]
+    [1, 4, 9, 64, 125]
+    [1, 4, 9, 64, 125]
+    [1, 4, 9, 64, 125]
+    [125]
+    [125]
+    [125]
+    [125]
+    [125]
+
+
+
+
+
+    203
+
+
+
+## !! 오늘 배운 것 정리
+* 반복문
+    * 정해진 순서를(next) 반복하는 것
+    * 형태
+    ```python
+    # for 변수 in 순회가능한객체: # stopItoration까지 반복
+    #     code
+
+    # while 조건: # true까지 반복
+    #     code 
+    ```
+    * 순회 가능한 객체(이터러블 객체) : 문자열, 리스트, 튜플, 딕셔너리, 셋, range, enumerate, map, set, sorted, reverse 등
+    * 순회 불가능한 객체 : int, float 등 
+    * code 안에서 변수를 사용하지 않을 경우 언더바를 관습적으로 사용합니다.
+    ```python
+    # for _ in 순회가능한객체:
+    #     code
+    ```
+    * 반복문 다음 else 구문 : break 없이 정상 종료 되면 실행
+    * 반복문 안에 break 구문 : 자신을 감싸고 있는 반복문 1개 탈출
+    * 반복문 안에 continue 구문 : 다음 루프로 넘어감
+    * 반복문 안에 pass : 공백만 채워줄 뿐 아무 기능 없음
+
+* bulit-in function
+    * 수학적 통계에 활용되는 함수
+        - abs( ) : 괄호 안에 있는 값을 절대값으로 출력해줍니다.
+        - all( ) : 괄호 안에 있는 값들이 모두 True(False)일 때 True(False)를 출력합니다.
+        - any( ) : 괄호안에 있는 값이 하나라고 True이면 True로 출력합니다.
+        - pow( ) : 제곱을 출력합니다.
+        - max( ) : 값의 최댓값을 출력합니다.
+        - min( ) : 값의 최솟값을 출력합니다.
+        - sum( ) : 값의 합계를 출력합니다.
+        - len( ) : 문자열의 길이를 출력합니다.
+        - sorted( ) : 데이터를 정렬해줍니다.
+        - reversed( ) : 정렬되지 않은 상태에서 값을 역순으로 출력합니다.
+
+    * 형변환 함수
+        - set( )
+        - dict( )
+        - hex( ) : 16진법
+        - bin( ) : 2진법
+        - oct( ) : 8진법
+        - bool( )
+        - str( )
+        - ord( ) : 각각의 문자에 대한 숫자값을 출력해줍니다.(유니코드표를 참고하세요.)
+        - float( )
+        - tuple( )
+        - chr( ) : 숫자값을 통해서 문자를 출력합니다.
+        - list( )
+        - range( )
+        - complex( )
+
+    * 도움말
+        - help( )
+
+    * object 관련 함수
+        - dir( )
+        - id( )
+        - type( )
+
+    * 순회 가능한 객체
+        - enumerate( ) : 값에 순위를 매기고 싶을 때 사용합니다.
+        - range( )
+        - sorted( )
+        - reversed( )
+        - filter( )
+        - zip( )
+        - map( )
+
+* args, kargs
+    * 가변 아규먼트, 가변 키워드 아규먼트
+    ```python
+    def print_args(*args): # 꼭 args가 될 필요는 없습니다.
+        print(args)
+
+    print_args(100, True, 'leehojun')
+
+    ####
+
+    def print_kwargs(**kwargs): # 꼭 kargs가 될 필요는 없습니다.
+    print(kwargs)
+
+    print_kwargs(name='leehojun', age='10')
+    ```
+
+* lambda
+    * lambda 는 익명함수라고 하며, 이름이 없는 함수
+    * 보통은 다시 사용되지 않을 함수를 선언할 때 사용
+    ```python
+    leehojun = lambda x : x**2
+
+    # def leehojun(x):
+    #     return x ** 2
+
+    list(map(lambda x : x ** 2, [1, 2, 3, 4]))
+    ```
+
+## 클래스
+
+* 클래스는 데이터(멤버)와 기능(메서드)을 가지고 있는 인스턴트 객체를 생성하기 위한 역할
+* 우리가 배우고 있는 Python을 객체 지향 프로그래밍 언어
+    ```
+    현실                                코드
+    차 ---------------------------> class Car()
+    정수 -------------------------> class int()
+    실수 -------------------------> class float()
+
+    인간이 만들어 
+    놓은 현실 세계에서의 
+    정의 또는 약속 --------------> class
+    
+    1 + 1 = 2가 컴퓨터 입장에서는 10일 수도 있고
+    'A' + 'A' = 'AA'가 아니라 컴퓨터 입장에서는 130일 수 있습니다.
+    ```
+
+
+```python
+class CarFactory(object): # 첫 문자는 대문자로 합니다.
+    max_speed = 300
+    max_people = 5
+    # 아래 self는 스스로를 가리키기에
+    # self는 인스턴스를 가리킵니다.
+    def move(self):
+        print('차가 움직이고 있습니다.')
+    def stop(self):
+        print('차가 멈췄습니다.')
+
+# 클래스로 바로 접근해서 무엇을 하는 것을 권고하지 않습니다.
+# (제대로 알지 못하는 상태에서(인스턴스 변수, 클래스 변수))
+print(CarFactory.max_speed)
+k5 = CarFactory() # 붕어빵(인스턴스) = 붕어빵틀(클래스)
+k3 = CarFactory() # 차(인스턴스) = 자동차공장(클래스)
+```
+
+    300
+
+
+
+```python
+class CarFactory(object):
+    max_speed = 300
+    max_people = 5
+    def move(self):
+        print('차가 움직이고 있습니다.')
+    def stop(self):
+        print('차가 멈췄습니다.')
+
+k5 = CarFactory()
+k3 = CarFactory()
+k5.move()
+k3.move()
+k5.stop()
+k3.stop()
+print(k5.max_speed)
+```
+
+    300
+    차가 움직이고 있습니다.
+    차가 움직이고 있습니다.
+    차가 멈췄습니다.
+    차가 멈췄습니다.
+    300
+
+
+
+```python
+d = {'one':10, 'two':20}
+# d.three = 30
+d['three'] = 30
+print(d['three'])
+```
+
+    30
+
+
+
+```python
+def f():
+    pass
+f.one = 10
+f.two = 20
+f.three = 30
+print(f.one)
+```
+
+    10
+
+
+
+```python
+# 메서드 : 클래스 내에 함수
+# 멤버 : 클래스 내에 변수
+class CarFactory(object):
+    max_speed = 300
+    max_people = 5
+    def __init__(self, userInputName): # 인스턴스가 만들어질 때 실행되는 메서드
+        self.name = userInputName
+    def move(self):
+        print(self.name, '차가 움직이고 있습니다.')
+    def stop(self):
+        print(self.name, '차가 멈췄습니다.')
+
+k5 = CarFactory('케이파이브')
+k3 = CarFactory('케이쓰리')
+k5.move()
+k3.move()
+k5.stop()
+k3.stop()
+print(k5.max_speed)
+```
+
+    케이파이브 차가 움직이고 있습니다.
+    케이쓰리 차가 움직이고 있습니다.
+    케이파이브 차가 멈췄습니다.
+    케이쓰리 차가 멈췄습니다.
+    300
+
+
+
+```python
+k3.name
+k3.max_speed
+```
+
+
+
+
+    300
+
+
+
+
+```python
+print(type(k3))
+print(dir(k3))
+# 'max_people', 멤버
+# 'max_speed', 멤버
+# 'move', 메소드
+# 'name', 멤버
+# 'stop' 메소드
+```
+
+    <class '__main__.CarFactory'>
+    ['__class__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__module__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__', '__weakref__', 'max_people', 'max_speed', 'move', 'name', 'stop']
+
+
+
+```python
+l = [10, 20, 30]
+print(type(l))
+print(dir(l))
+# 메소드
+# 'append', 'clear', 'copy', 'count', 'extend', 
+# 'index', 'insert', 'pop', 'remove', 'reverse', 'sort'
+```
+
+    <class 'list'>
+    ['__add__', '__class__', '__class_getitem__', '__contains__', '__delattr__', '__delitem__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__getitem__', '__gt__', '__hash__', '__iadd__', '__imul__', '__init__', '__init_subclass__', '__iter__', '__le__', '__len__', '__lt__', '__mul__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__reversed__', '__rmul__', '__setattr__', '__setitem__', '__sizeof__', '__str__', '__subclasshook__', 'append', 'clear', 'copy', 'count', 'extend', 'index', 'insert', 'pop', 'remove', 'reverse', 'sort']
+
+
+
+```python
+class list(object):
+    def __add__(self):
+        pass
+    def __class__(self):
+        pass
+    def __class_getitem__(self):
+        pass
+    def __eq__(self):
+        pass
+    def __ge__(self):
+        pass 
+    # ... 생략 ...
+    def append(self):
+        pass
+    def clear(self):
+        pass
+    def copy(self):
+        pass
+    def count(self):
+        pass
+    def extend(self):
+        pass
+    def index(self):
+        pass
+    # ... 생략 ...
+```
+
+
+```python
+# 클래스 변수
+# 클래스 바로 하위에 자리하고 있으며
+# 모든 인스턴스가 공유합니다.
+class Car(object):
+    # kinds가 인스턴스에 없기에 class변수로 접근
+    # speed는 값을 = 로 할당했기에 인스턴스변수 생성
+    kinds = []
+    speed = 300
+    def add_kinds(self, name):
+        self.kinds.append(name)
+    def change_speed(self, speed):
+        self.speed = speed
+
+k5 = Car()
+k3 = Car()
+k5.add_kinds('k5')
+k3.add_kinds('k3')
+k5.change_speed(500)
+k3.change_speed(250)
+
+print('k5.kinds:', k5.kinds)
+print('k3.kinds:', k3.kinds)
+print('k5.speed:', k5.speed)
+print('k3.speed:', k3.speed)
+```
+
+    k5.kinds: ['k5', 'k3']
+    k3.kinds: ['k5', 'k3']
+    k5.speed: 500
+    k3.speed: 250
+
+
+
+```python
+# 클래스 변수
+# 클래스 바로 하위에 자리하고 있으며
+# 모든 인스턴스가 공유합니다.
+# 인스턴스 변수
+# 인스턴스 영역 안에서만 사용하는 변수
+class Car(object):
+    # kinds가 인스턴스에 없기에 class변수로 접근
+    # speed는 값을 = 로 할당했기에 인스턴스변수 생성
+    kinds = []
+    speed = 300
+    def add_kinds(self, name):
+        self.kinds.append(name) # self.kinds = [name]로 사용하면 인스턴스 변수가 됩니다.
+    def change_speed(self, speed):
+        self.speed = speed
+
+k5 = Car()
+k3 = Car()
+k5.speed = 500
+k3.speed # 클래스 변수는 값을 공유한다고 했는데?
+```
+
+
+
+
+    300
+
+
+
+
+```python
+id()
+```
+
+
+```python
+주인공 = ['licat', 10000]
+
+class MobFactory(object):
+    def __init__(self, 이름, 공격력, 체력, 마력, 크기_넓이, 크기_높이, 아이템확률, x, y):
+        self.name = 이름
+        self.power = 공격력
+        self.hp = 체력
+        self.mp = 마력
+        self.width = 크기_넓이
+        self.height = 크기_높이
+        self.dropRate = 아이템확률
+
+    def attack(self):
+        주인공[1] -= self.power
+        print(f'{self.name}이 {self.power}데미지로 공격했습니다.')
+        print(f'주인공의 체력이 {주인공[1]}가 되었습니다.')
+
+슬라임 = MobFactory('슬라임', 1, 10, 10, 2, 2, 100, 1, 1)
+오크 = MobFactory('오크', 10, 10, 10, 2, 2, 80, 1, 1)
+고블린 = MobFactory('고블린', 100, 10, 10, 2, 2, 60, 1, 1)
+드래곤 = MobFactory('드래곤', 1000, 10, 10, 2, 2, 40, 1, 1)
+해골 = MobFactory('해골', 10000, 10, 10, 2, 2, 1, 1, 1)
+
+슬라임.attack()
+```
+
+    슬라임이 1데미지로 공격했습니다.
+    주인공의 체력이 9999가 되었습니다.
+
+
+
+```python
+주인공 = ['licat', 10000]
+
+class MobFactory(object):
+    def __init__(self, 이름, 공격력, 체력, 마력, 크기_넓이, 크기_높이, 아이템확률, x, y):
+        self.name = 이름
+        self.power = 공격력
+        self.hp = 체력
+        self.mp = 마력
+        self.width = 크기_넓이
+        self.height = 크기_높이
+        self.dropRate = 아이템확률
+
+    def attack(self):
+        주인공[1] -= self.power
+        print(f'{self.name}이 {self.power}데미지로 공격했습니다.')
+        print(f'주인공의 체력이 {주인공[1]}가 되었습니다.')
+
+
+오크 = MobFactory('오크', 10, 10, 10, 2, 2, 80, 1, 1)
+고블린 = MobFactory('고블린', 100, 10, 10, 2, 2, 60, 1, 1)
+드래곤 = MobFactory('드래곤', 1000, 100000, 10, 2, 2, 40, 1, 1)
+해골 = MobFactory('해골', 10000, 10, 10, 2, 2, 1, 1, 1)
+
+슬라임.attack()
+```
+
+    슬라임이 1데미지로 공격했습니다.
+    주인공의 체력이 9999가 되었습니다.
+
+
+
+```python
+주인공 = ['licat', 10000]
+
+class MobFactory(object):
+    def __init__(self, 이름, 공격력, 체력, 마력, 크기_넓이, 크기_높이, 아이템확률, x, y):
+        self.name = 이름
+        self.power = 공격력
+        self.hp = 체력
+        self.mp = 마력
+        self.width = 크기_넓이
+        self.height = 크기_높이
+        self.dropRate = 아이템확률
+
+    def __add__(self, next):
+        if self.name == '슬라임':
+            return MobFactory(f'왕{self.name + next.name}', 
+                              self.power + next.power, 
+                              10, 10, 2, 2, 100, 1, 1)
+        return None
+
+    def attack(self):
+        주인공[1] -= self.power
+        print(f'{self.name}이 {self.power}데미지로 공격했습니다.')
+        print(f'주인공의 체력이 {주인공[1]}가 되었습니다.')
+    
+
+슬라임 = 슬라임 = MobFactory('슬라임', 1, 10, 10, 2, 2, 100, 1, 1)
+왕슬라임 = 슬라임 + 슬라임
+
+왕슬라임.power
+왕슬라임.name
+```
+
+
+
+
+    '왕슬라임슬라임'
+
+
+
+
+```python
+# 성철님 코드
+class User(object):
+    def __init__(self, 이름, 공격력, 체력, 마력, 크기_넓이, 크기_높이, 아이템확률, x, y):
+        self.name = 이름
+        self.power = 공격력
+        self.hp = 체력
+        self.mp = 마력
+        self.width = 크기_넓이
+        self.height = 크기_높이
+        self.dropRate = 아이템확률
+
+    def 슬라임_attack(self):
+        슬라임.hp -= self.power
+        print(f'{self.name}이 {self.power}데미지로 공격했습니다.')
+        print(f'몬스터의 체력이 {슬라임.hp}가 되었습니다.')
+
+licat = User('licat', 5, 10000, 1000, 2, 2, 0, 2, 2)
+licat.슬라임_attack()
+mura = User('mura', 5, 10000, 1000, 2, 2, 0, 2, 2)
+mura.슬라임_attack()
+```
+
+    licat이 5데미지로 공격했습니다.
+    몬스터의 체력이 5가 되었습니다.
+    mura이 5데미지로 공격했습니다.
+    몬스터의 체력이 0가 되었습니다.
+
+
+
+```python
+# 개선 코드
+class User(object):
+    def __init__(self, 이름, 공격력, 체력, 마력, 크기_넓이, 크기_높이, 아이템확률, x, y):
+        self.name = 이름
+        self.power = 공격력
+        self.hp = 체력
+        self.mp = 마력
+        self.width = 크기_넓이
+        self.height = 크기_높이
+        self.dropRate = 아이템확률
+
+    def attack(self, target):
+        target.hp -= self.power
+        print(f'{self.name}이 {self.power}데미지로 공격했습니다.')
+        print(f'{target.name}의 체력이 {target.hp}가 되었습니다.')
+
+licat = User('licat', 5, 10000, 1000, 2, 2, 0, 2, 2)
+licat.attack(슬라임)
+licat.attack(드래곤)
+```
+
+    licat이 5데미지로 공격했습니다.
+    슬라임의 체력이 -5가 되었습니다.
+    licat이 5데미지로 공격했습니다.
+    드래곤의 체력이 99995가 되었습니다.
+
+
+
+```python
+# 준균님 코드
+class Hero(object):
+    def __init__(self, hero_info):
+        self.info = hero_info
+    def get_info(self):
+        print(f"{self.info['name']}/위치 : {self.info['pos']}/체력 {self.info['hp']}/{self.info['max_hp']} / 레벨{self.info['level']}")
+
+licat = Hero({
+    'name' : 'licat',
+    'pos' : [1,2],
+    'max_hp' : 100,
+    'hp' : 100,
+    'level' : 1,
+})
+
+mura = Hero({
+    'name' : 'mura',
+    'pos' : [5,5],
+    'max_hp' : 200,
+    'hp' : 200,
+    'level' : 5,
+})
+
+licat.get_info()
+mura.get_info()
+```
+
+
+```python
+# 질문? JAVA의 this와 self가 같은 개념인지?
+# 답? JavaScript나 JAVA의 self와 개념이 비슷한데, 역시나 이렇게 대조를 해가면서 공부를 하면
+# 오해의 여지가 생깁니다. 데이터 구조부터 다르긴 합니다.
+```
+
+
+```python
+# 동섭님 코드
+고블린 = ['Monster', 5000]
+class PlayerSet(object):
+    def __init__(self, 이름, 물리공격력, 마법공격력, 체력, 마력, 크기_넓이, 크기_높이, 위치_x축, 위치_y축):
+        self.name = 이름
+        self.hit_power = 물리공격력
+        self.magic_power = 마법공격력
+        self.hp = 체력
+        self.mp = 마력
+        self.width = 크기_넓이
+        self.height = 크기_높이
+        self.coordinate_x = 위치_x축
+        self.coordinate_y = 위치_y축
+    def attack(self):
+        고블린[1] -= self.hit_power
+        print(f'{self.name}이 {self.hit_power}데미지로 공격했습니다.')
+        print(f'고블린의 체력이 {주인공[1]}이 되었습니다.')
+    def magic(self):
+        고블린[1] -= self.magic_power
+        self.mp -= 5
+        print(f'{self.name}이 {self.magic_power}데미지로 공격했습니다.')
+        print(f'고블린의 체력이 {고블린[1]}이 되었습니다.')
+        print(f'{self.name}의 마력이 {self.mp}이 되었습니다.')
+
+
+라이캣 = PlayerSet('liecat', 100, 10, 2000, 500, 5, 5, 25, 10)
+뮤라 = PlayerSet('mura', 5, 100, 2000,  1000, 3, 3, 30, 17)
+
+라이캣.attack(), 뮤라.magic()
+라이캣.magic(), 뮤라.attack()
+```
+
+
+```python
+# 종수님 코드
+class Character(object):
+    def __init__(self, 이름, 직업, 외형):
+        self.name = 이름
+        self.characterClass = 직업
+        self.characterModel = 외형
+        self.x = 0
+        self.y = 0
+    
+    def change_model(self, newCharacterModel):
+        self.characterModel = newCharacterModel
+        print(f'외형 변경 {self.characterModel} -> {newCharacterModel}')
+    
+    def move_left(self):
+        self.x += 1
+        print(f'현재 좌표 ({self.x}, {self.y})')
+    
+    def move_right(self):
+        self.x -= 1
+        print(f'현재 좌표 ({self.x}, {self.y})')
+
+    def move_up(self):
+        self.y += 1
+        print(f'현재 좌표 ({self.x}, {self.y})')
+    
+    def move_down(self):
+        self.y -= 1
+        print(f'현재 좌표 ({self.x}, {self.y})')
+
+licat = Character('licat', 직업=1, 외형=1)
+mura = Character('mura', 2, 2)
+```
+
+
+```python
+# 쉽고 중요한 예제!
+
+class BlogFactory(object):
+    def __init__(self, 제목, 내용, 조회수, 글쓴이, 생성날짜):
+        self.title = 제목
+        self.content = 내용
+        self.count = 조회수
+        self.writer = 글쓴이
+        self.create_date = 생성날짜
+
+게시글1 = BlogFactory(
+        '오늘 제주의 날씨',
+        '오늘 제주의 날씨는 참 좋네요! 블라블라',
+        '0',
+        '이호준',
+        '2023/05/10',
+    )
+
+게시글2 = BlogFactory(
+        '오늘 부산의 날씨',
+        '오늘 부산의 날씨는 참 좋네요! 블라블라',
+        '1000000',
+        '김재현',
+        '2023/05/10',
+    )
+
+게시글3 = BlogFactory(
+        '오늘 강원의 날씨',
+        '오늘 강원의 날씨는 참 좋네요! 블라블라',
+        '10000',
+        '범남궁',
+        '2023/05/10',
+    )
+    
+게시글1.title
+```
+
+
+
+
+    '오늘 제주의 날씨'
+
+
+
+
+```python
+# 쉽고 중요한 예제!
+
+class BlogFactory(object):
+    def __init__(self, 제목, 내용, 조회수, 글쓴이, 생성날짜):
+        self.title = 제목
+        self.content = 내용
+        self.count = 조회수
+        self.writer = 글쓴이
+        self.create_date = 생성날짜
+
+게시글1 = BlogFactory(
+        '오늘 제주의 날씨',
+        '오늘 제주의 날씨는 참 좋네요! 블라블라',
+        '0',
+        '이호준',
+        '2023/05/10',
+    )
+
+게시글2 = BlogFactory(
+        '오늘 부산의 날씨',
+        '오늘 부산의 날씨는 참 좋네요! 블라블라',
+        '1000000',
+        '김재현',
+        '2023/05/10',
+    )
+
+게시글3 = BlogFactory(
+        '오늘 강원의 날씨',
+        '오늘 강원의 날씨는 참 좋네요! 블라블라',
+        '10000',
+        '범남궁',
+        '2023/05/10',
+    )
+
+data = [게시글1, 게시글2, 게시글3]
+for i in data:
+    print(i.title)
+```
+
+    오늘 제주의 날씨
+    오늘 부산의 날씨
+    오늘 강원의 날씨
+
+
+
+```python
+# 쉽고 중요한 예제!
+# 이 코드는 가능하면 손으로 2 ~ 3번 써보시길 권해드립니다.
+
+class BlogFactory(object):
+    def __init__(self, 제목, 내용, 조회수, 글쓴이, 생성날짜):
+        self.title = 제목
+        self.content = 내용
+        self.count = 조회수
+        self.writer = 글쓴이
+        self.create_date = 생성날짜
+
+게시글1 = BlogFactory(
+        '오늘 제주의 날씨',
+        '오늘 제주의 날씨는 참 좋네요! 블라블라',
+        '0',
+        '이호준',
+        '2023/05/10',
+    )
+
+게시글2 = BlogFactory(
+        '오늘 부산의 날씨',
+        '오늘 부산의 날씨는 참 좋네요! 블라블라',
+        '1000000',
+        '김재현',
+        '2023/05/10',
+    )
+
+게시글3 = BlogFactory(
+        '오늘 강원의 날씨',
+        '오늘 강원의 날씨는 참 좋네요! 블라블라',
+        '10000',
+        '범남궁',
+        '2023/05/10',
+    )
+
+data = [게시글1, 게시글2, 게시글3]
+for i in data:
+    if i.writer == '이호준':
+        print(i.title)
+        print(i.content)
+        print(i.count)
+        print(i.create_date)
+```
+
+    오늘 제주의 날씨
+    오늘 제주의 날씨는 참 좋네요! 블라블라
+    0
+    2023/05/10
+
+
+
+```python
+data = [게시글1, 게시글2, 게시글3]
+for i in data:
+    print(i.title)
+    print(i.content)
+    print(i.writer)
+    print(i.count)
+    print(i.create_date)
+```
+
+
+```python
+data = [게시글1, 게시글2, 게시글3]
+for i in data:
+    print(f'<h2>{i.title}</h2>')
+    print(f'<p>{i.content}</p>')
+    print(f'<p>{i.writer}</p>')
+    print(f'<p>{i.count}</p>')
+    print(f'<p>{i.create_date}</p>')
+```
+
+
+```python
+# 클래스 변수로 글쓴이 찾기
+```
+
+
+```python
+# 조금 난이도가 있는 예제이기 때문에
+# 기억하지 않으셔도 됩니다.
+
+class BlogFactory(object):
+    dataset = []
+
+    def __init__(self, 제목, 내용, 조회수, 글쓴이, 생성날짜):
+        self.title = 제목
+        self.content = 내용
+        self.count = 조회수
+        self.writer = 글쓴이
+        self.create_date = 생성날짜
+        self.dataset.append(self)
+
+게시글1 = BlogFactory(
+        '오늘 제주의 날씨',
+        '오늘 제주의 날씨는 참 좋네요! 블라블라',
+        '0',
+        '이호준',
+        '2023/05/10',
+    )
+
+게시글2 = BlogFactory(
+        '오늘 부산의 날씨',
+        '오늘 부산의 날씨는 참 좋네요! 블라블라',
+        '1000000',
+        '김재현',
+        '2023/05/10',
+    )
+
+게시글3 = BlogFactory(
+        '오늘 강원의 날씨',
+        '오늘 강원의 날씨는 참 좋네요! 블라블라',
+        '10000',
+        '범남궁',
+        '2023/05/10',
+    )
+
+for i in 게시글1.dataset:
+    print(i.title)
+```
+
+    오늘 제주의 날씨
+    오늘 부산의 날씨
+    오늘 강원의 날씨
+
+
+
+```python
+# x = 10
+# y = 10
+# x.__add__ = lambda self, next : str(self) + str(next) # error
+```
+
+
+```python
+# python read only method create 가능한가?
+```
+
+
+```python
+class BlogFactory(object):
+    dataset = []
+
+    def __init__(self, 제목, 내용, 조회수, 글쓴이, 생성날짜):
+        self.title = 제목
+        self.content = 내용
+        self.count = 조회수
+        self.writer = 글쓴이
+        self.create_date = 생성날짜
+        self.dataset.append(self)
+
+    def __str__(self):
+        return 'hello'
+
+게시글1 = BlogFactory(
+        '오늘 제주의 날씨',
+        '오늘 제주의 날씨는 참 좋네요! 블라블라',
+        '0',
+        '이호준',
+        '2023/05/10',
+    )
+
+게시글2 = BlogFactory(
+        '오늘 부산의 날씨',
+        '오늘 부산의 날씨는 참 좋네요! 블라블라',
+        '1000000',
+        '김재현',
+        '2023/05/10',
+    )
+
+print(게시글1, 게시글2)
+```
+
+    hello hello
+
+
+
+```python
+# 중요한 예제입니다.
+class BlogFactory(object):
+    dataset = []
+
+    def __init__(self, 제목, 내용, 조회수, 글쓴이, 생성날짜):
+        self.title = 제목
+        self.content = 내용
+        self.count = 조회수
+        self.writer = 글쓴이
+        self.create_date = 생성날짜
+        self.dataset.append(self)
+
+    def __str__(self):
+        return self.title
+
+게시글1 = BlogFactory(
+        '오늘 제주의 날씨',
+        '오늘 제주의 날씨는 참 좋네요! 블라블라',
+        '0',
+        '이호준',
+        '2023/05/10',
+    )
+
+게시글2 = BlogFactory(
+        '오늘 부산의 날씨',
+        '오늘 부산의 날씨는 참 좋네요! 블라블라',
+        '1000000',
+        '김재현',
+        '2023/05/10',
+    )
+
+print(게시글1)
+print(게시글2)
+```
+
+    오늘 제주의 날씨
+    오늘 부산의 날씨
+
+
+
+```python
+# 중요한 예제입니다.
+class BlogFactory(object):
+    dataset = []
+
+    def __init__(self, 제목, 내용, 조회수, 글쓴이, 생성날짜):
+        self.title = 제목
+        self.content = 내용
+        self.count = 조회수
+        self.writer = 글쓴이
+        self.create_date = 생성날짜
+        self.dataset.append(self)
+
+    def __str__(self):
+        return f'제목 : {self.title}, 내용 : {self.content[:5]}, 글쓴이 : {self.writer}'
+
+게시글1 = BlogFactory(
+        '오늘 제주의 날씨',
+        '오늘 제주의 날씨는 참 좋네요! 블라블라',
+        '0',
+        '이호준',
+        '2023/05/10',
+    )
+
+게시글2 = BlogFactory(
+        '오늘 부산의 날씨',
+        '오늘 부산의 날씨는 참 좋네요! 블라블라',
+        '1000000',
+        '김재현',
+        '2023/05/10',
+    )
+
+print(게시글1)
+print(게시글2)
+```
+
+    제목 : 오늘 제주의 날씨, 내용 : 오늘 제주, 글쓴이 : 이호준
+    제목 : 오늘 부산의 날씨, 내용 : 오늘 부산, 글쓴이 : 김재현
+
+
+
+```python
+# 중요한 예제입니다.
+class BlogFactory(object):
+    dataset = []
+
+    def __init__(self, 제목, 내용, 조회수, 글쓴이, 생성날짜):
+        self.title = 제목
+        self.content = 내용
+        self.count = 조회수
+        self.writer = 글쓴이
+        self.create_date = 생성날짜
+        self.dataset.append(self)
+
+    def __str__(self):
+        return f'{len(self.dataset)}. 제목 : {self.title}, 내용 : {self.content[:5]}, 글쓴이 : {self.writer}'
+
+게시글1 = BlogFactory(
+        '오늘 제주의 날씨',
+        '오늘 제주의 날씨는 참 좋네요! 블라블라',
+        '0',
+        '이호준',
+        '2023/05/10',
+    )
+print(게시글1)
+
+게시글2 = BlogFactory(
+        '오늘 부산의 날씨',
+        '오늘 부산의 날씨는 참 좋네요! 블라블라',
+        '1000000',
+        '김재현',
+        '2023/05/10',
+    )
+print(게시글2)
+```
+
+    1. 제목 : 오늘 제주의 날씨, 내용 : 오늘 제주, 글쓴이 : 이호준
+    2. 제목 : 오늘 부산의 날씨, 내용 : 오늘 부산, 글쓴이 : 김재현
+
+
+### !! 클래스 연습문제
+
+
+```python
+# 각각 class를 만들어주시고, instance를 2개 이상 넣어서
+# 활용(출력, 수정 등) 해보세요.
+# 15분씩 총 30분, 6분에 문제를 냈기 때문에 36분까지 실습해보겠습니다.
+# 각 코드는 만들어서 쓰레드에 올려주세요.
+# 중요한 코드이니 꼭 한 번 만들어보세요! :)
+class UserInfo(object):
+    pass
+
+class BookInfo(object):
+    pass
+```
+
+
+```python
+# (advanced) 그리고 물건을 사면 물건의 값이 UserInfo를 건드려야 하겠죠. 
+# 물건도 class로 구현해주시면 너무 좋은 예제가 될 것 같네요. 🙂
+
+# (advanced) 실제 github의 유저 정보를 등을 이용해서도 만들어보세요.
+# https://api.github.com/repos/paullabkorea/jupyternotebookblog/languages
+# https://docs.github.com/ko/rest/repos/repos?apiVersion=2022-11-28#get-a-repository
+
+```
+
+
+```python
+import hashlib
+
+비밀번호 = hashlib.sha256()
+비밀번호.update('helloworld!'.encode('utf-8'))
+비밀번호.hexdigest() # 영화를 집어넣든, 음악을 집어넣든, 소설을 집어넣든, 암호를 집어넣든 모두 64자로 만듭니다.
+```
+
+
+
+
+    '98d234db7e91f5ba026a25d0d6f17bc5ee0a347ea2216b0c9de06d43536d49f4'
+
+
+
+
+```python
+# 1번째 스탭
+# 공개되는 정보, 공개되지 않는 정보
+# 멤버(정적 수치, 문자열)와 메서드(기능)
+class Product(object):
+    def __init__(self, 품명, 가격):
+        self.product_name = 품명
+        self.price = 가격
+        
+자전거 = Product(
+    '자전거',
+    100000,
+)
+
+class UserInfo(object):
+    def __init__(self, 
+                 이름, 
+                 이메일,
+                 비밀번호, 
+                 주요접속기기, 
+                 주요접속국가, 
+                 주요접속지역, 
+                 마지막접속일자, 
+                 회원가입날짜, 
+                 별명, 
+                 적립금, 
+                 생일, 
+                 휴대폰번호, 
+                 휴대폰인증여부, 
+                 고객등급, 
+                 휴면계정여부):
+        self.이름 = 이름
+        self.고객등급 = 고객등급
+        self.적립금 = 적립금
+    
+    def 물품구매(self, product):
+        self.적립금 -= product.price
+
+    def 회원탈퇴(self):
+        pass
+
+    def 장바구니등록(self):
+        pass
+
+이호준 = UserInfo(
+    이름 = '이호준',
+    이메일 = 'hojun@gmail.com',
+    비밀번호 = '98d234db7e91f5ba026a25d0d6f17bc5ee0a347ea2216b0c9de06d43536d49f4',
+    주요접속기기 = 'Android',
+    주요접속국가 = 'Korea',
+    주요접속지역 = 'Jeju',
+    마지막접속일자 = '23/05/10',
+    회원가입날짜 = '23/05/10',
+    별명 = '준',
+    적립금 = 1000000000,
+    생일 = '13/13',
+    휴대폰번호 = '010-0000-0000',
+    휴대폰인증여부 = True,
+    고객등급 = 'VIP',
+    휴면계정여부 = False,
+)
+
+이호준.물품구매(자전거)
+이호준.적립금
+```
+
+
+
+
+    999900000
+
+
+
+
+```python
+# 광호님 코드
+class BookInfo(object):
+    def __init__(self, title, price, writer, publisher, count, soldout, buyer):
+        self.title = title
+        self.price = price
+        self.writer = writer
+        self.publisher = publisher
+        self.count = count
+        self.soldout = soldout
+        self.buyer = buyer
+
+    def __str__(self):
+        return self.title
+
+    def sell(self, buyer):
+        if self.get_soldout():
+            print('재고가 없습니다')
+            return None
+        
+        self.count -= 1
+        self.add_buyer(buyer)
+        
+        if self.count <= 0:
+           self.set_soldout(True)
+
+    def add_buyer(self, buyer):
+        self.buyer.append(buyer)
+    
+    def set_soldout(self, value):
+        self.soldout = value
+
+    def get_soldout(self):
+        return self.soldout
+```
+
+
+```python
+# 진찬님 코드
+class BookInfo(object):
+    dataset = []
+
+    def __init__(self, title, writer, publisher, publish_date, price):
+        self.title = title
+        self.writer = writer
+        self.publisher = publisher
+        self.publish_date = publish_date
+        self.price = price
+        self.dataset.append(self)
+
+    def __str__(self):
+        return f'제목: {self.title}, 저자: {self.writer}, 출판사: {self.publisher}, 출판일: {self.publish_date}, 가격: {self.price}'
+    
+book1 = BookInfo(
+    title = '마블',
+    writer = '아이언맨',
+    publisher = '어벤져스',
+    publish_date = '2023/05/10',
+    price = 10000
+)
+print(book1)
+```
+
+    제목: 마블, 저자: 아이언맨, 출판사: 어벤져스, 출판일: 2023/05/10, 가격: 10000
+
+
+
+```python
+class Car(object):
+    MaxSpeed = 300
+    MaxPeoeple = 5
+    def __init__(self):
+        pass
+    def move(self, x):
+        pass
+    def stop(self):
+        print('멈췄습니다.')
+    @staticmethod #decorator
+    def 스피드배속(현재스피드, 배속할스피드):
+        print(f'현재 {현재스피드 * 배속할스피드}의 스피드로 달리고 있습니다.')
+
+Car.스피드배속(100, 2) # 붕어빵 찍는 틀이 얼마나 붕어빵을 만들어 냈는가?
+```
+
+    현재 200의 스피드로 달리고 있습니다.
+
+
+
+```python
+#예를 들어
+class Hotel:
+    pass
+
+Hotel.빈방있는호텔() # 전체 호텔에 빈방이 있는 호텔
+호텔1.빈방() #호텔1에 빈방이 있는지 여부
+```
+
+### 상속
+
+
+```python
+# 이 예제는 기억하고 있으셔야 합니다.
+class Car:
+    maxSpeed = 300
+    maxPeople = 5
+    def move(self, x):
+        print(x, '의 스피드로 달리고 있습니다.')
+    def stop(self):
+        print('멈췄습니다.')
+
+class HybridCar(Car):
+    battery = 1000
+    batteryKM = 300
+
+class ElectricCar(HybridCar):
+    battery = 2000
+    batteryKM = 600
+```
+
+
+```python
+dir(k3)
+
+```
+
+
+```python
+K3 = Car()
+HyK3 = HybridCar()
+ElHyK3 = ElectricCar()
+# id(K3.maxSpeed), id(HyK3.maxSpeed)
+# id(K3.move), id(HyK3.move)
+
+ElHyK3.move(10)
+```
+
+    10 의 스피드로 달리고 있습니다.
+
+
+### !! 오늘 배운 것 정리
+* 클래스
+    * 클래스는 데이터(멤버)와 기능(메서드)을 가지고 있는 인스턴트 객체를 생성하기 위한 역할
+    * 우리가 배우고 있는 Python을 객체 지향 프로그래밍 언어
+        ```
+        현실                                코드
+        차 ---------------------------> class Car()
+        정수 -------------------------> class int()
+        실수 -------------------------> class float()
+
+        인간이 만들어 
+        놓은 현실 세계에서의 
+        정의 또는 약속 --------------> class
+        
+        1 + 1 = 2가 컴퓨터 입장에서는 10일 수도 있고
+        'A' + 'A' = 'AA'가 아니라 컴퓨터 입장에서는 130일 수 있습니다.
+        현실세계에서 '인간끼리' 약속을 코드에 세계로 옮긴거에요.
+        ```
+    * 예제 1
+        ```python
+        # 메서드 : 클래스 내에 함수
+        # 멤버 : 클래스 내에 변수
+        # 애트리뷰트 : 멤버 + 메서드
+        class CarFactory(object):
+            max_speed = 300
+            max_people = 5
+            def move(self):
+                print('차가 움직이고 있습니다.')
+            def stop(self):
+                print('차가 멈췄습니다.')
+
+        k5 = CarFactory()
+        k3 = CarFactory()
+        k5.move()
+        k3.move()
+        k5.stop()
+        k3.stop()
+        print(k5.max_speed)
+        ```
+    * 예제2
+        ```python
+        # 클래스 변수
+        # 클래스 바로 하위에 자리하고 있으며
+        # 모든 인스턴스가 공유합니다.
+        # 인스턴스 변수
+        # 인스턴스 영역 안에서만 사용하는 변수
+        class Car(object):
+            # kinds가 인스턴스에 없기에 class변수로 접근
+            # speed는 값을 = 로 할당했기에 인스턴스변수 생성
+            kinds = []
+            speed = 300
+            def add_kinds(self, name):
+                self.kinds.append(name) # self.kinds = [name]로 사용하면 인스턴스 변수가 됩니다.
+            def change_speed(self, speed):
+                self.speed = speed
+
+        k5 = Car()
+        k3 = Car()
+        k5.speed = 500
+        k3.speed # 클래스 변수는 값을 공유한다고 했는데?
+        ```
+    * 예제3
+        ```python
+        # 쉽고 중요한 예제!
+        # 이 코드는 가능하면 손으로 2 ~ 3번 써보시길 권해드립니다.
+
+        class BlogFactory(object):
+            def __init__(self, 제목, 내용, 조회수, 글쓴이, 생성날짜):
+                self.title = 제목
+                self.content = 내용
+                self.count = 조회수
+                self.writer = 글쓴이
+                self.create_date = 생성날짜
+
+        게시글1 = BlogFactory(
+                '오늘 제주의 날씨',
+                '오늘 제주의 날씨는 참 좋네요! 블라블라',
+                '0',
+                '이호준',
+                '2023/05/10',
+            )
+
+        게시글2 = BlogFactory(
+                '오늘 부산의 날씨',
+                '오늘 부산의 날씨는 참 좋네요! 블라블라',
+                '1000000',
+                '김재현',
+                '2023/05/10',
+            )
+
+        게시글3 = BlogFactory(
+                '오늘 강원의 날씨',
+                '오늘 강원의 날씨는 참 좋네요! 블라블라',
+                '10000',
+                '범남궁',
+                '2023/05/10',
+            )
+
+        data = [게시글1, 게시글2, 게시글3]
+        for i in data:
+            if i.writer == '이호준':
+                print(i.title)
+                print(i.content)
+                print(i.count)
+                print(i.create_date)
+        ```
+* 클래스 상속
+    * 클래스에서 상속은 상속해주는 클래스(Parent Class, Super class)의 내용(속성과 메소드)을 상속받는 클래스(Child class, sub class)가 가지게 되는 것
+    * 코드 예
+        ```python
+        # 이 예제는 기억하고 있으셔야 합니다.
+        class Car:
+            maxSpeed = 300
+            maxPeople = 5
+            def move(self, x):
+                print(x, '의 스피드로 달리고 있습니다.')
+            def stop(self):
+                print('멈췄습니다.')
+
+        class HybridCar(Car):
+            battery = 1000
+            batteryKM = 300
+
+        class ElectricCar(HybridCar):
+            battery = 2000
+            batteryKM = 600
+
+        K3 = Car()
+        HyK3 = HybridCar()
+        ElHyK3 = ElectricCar()
+        # id(K3.maxSpeed), id(HyK3.maxSpeed)
+        # id(K3.move), id(HyK3.move)
+
+        ElHyK3.move(10)
+        ```
+
+
+```python
+# 질문 : id를 객체가 아니라 count라는 정수값을 지정해줘서 증가시키고 싶습니다.
+# 답 : 아래코드처럼 사용하시면 됩니다.
+class BlogFactory(object):
+
+    count = 0
+
+    def __init__(self, 제목, 내용, 조회수, 글쓴이, 생성날짜):
+        BlogFactory.count += 1
+        self.id = BlogFactory.count
+        self.title = 제목
+        self.content = 내용
+        self.count = 조회수
+        self.writer = 글쓴이
+        self.create_date = 생성날짜
+
+    def __str__(self):
+        return f'{self.id}. 제목 : {self.title}, 내용 : {self.content[:5]}'
+
+게시글1 = BlogFactory(
+        '오늘 제주의 날씨',
+        '오늘 제주의 날씨는 참 좋네요! 블라블라',
+        '0',
+        '이호준',
+        '2023/05/10',
+    )
+
+게시글2 = BlogFactory(
+        '오늘 부산의 날씨',
+        '오늘 부산의 날씨는 참 좋네요! 블라블라',
+        '1000000',
+        '김재현',
+        '2023/05/10',
+    )
+
+print(게시글1)
+print(게시글2)
+```
+
+    1. 제목 : 오늘 제주의 날씨, 내용 : 오늘 제주
+    2. 제목 : 오늘 부산의 날씨, 내용 : 오늘 부산
+
+
+
+```python
+# 자율학습시간에 대한 피드백 => 문제를 내드리기로 하였습니다.
+# 매일 3시 40분 즈음에 advanced 문제를 드리고 각 조별 단톡방에 해당 내용을 공유하고 얘기하는 시간을 가지기로 하였습니다.
+```
+
+
+```python
+# 어제 새벽에 주신 코드ㅎㅎ
+# 반갑습니다. :) 이거 제가 오전에 설명해드려도 될까요? :) 
+# 우선 설계에서 UserInfo와 Product를 상속 관계로 만드는 것은 적절치 않습니다. 
+# 적절한지 여부는 부모 클래스의 정보를 자식 클래스가 가질 필요가 있는지로 판단해주시면 됩니다.
+class Product(object):
+    def __init__(self, 품명, 개수, 가격):
+        self.product_name = 품명
+        self.product_count = 개수
+        self.product_price = 가격
+    
+    def __str__(self):
+        return f'품명:{self.product_name}, 개수:{self.product_count}, 가격:{self.product_price}'
+
+시리얼 = Product('시리얼', 20, 8900)
+초코칩쿠키 = Product('초코칩쿠키', 30, 4300)
+칸쵸 = Product('칸쵸', 12, 1400)
+
+class UserInfo(Product):
+    dataset = []
+
+    def __init__(self, 이름, 닉네임, 휴대폰번호, 생년월일, 주소, 예치금, 고객등급):      
+        self.user_name = 이름
+        self.nickname = 닉네임
+        self.user_phone = 휴대폰번호
+        self.user_birth = 생년월일
+        self.user_addr = 주소
+        self.user_deposit = 예치금
+        self.user_rank = 고객등급
+
+    def 물품구매(self, product, count):
+        self.user_deposit -= product.product_price
+        시리얼.product_count -= count
+
+
+홍길동 = UserInfo(
+                    '홍길동', 
+                    '길동이', 
+                    '010-0000-0000', 
+                    '1993/10/10', 
+                    '경기도 광주시', 
+                    1000000, 
+                    'VIP')
+
+장판수 = UserInfo(
+                    '장판수', 
+                    '판자', 
+                    '010-1111-1111', 
+                    '1992/02/10', 
+                    '경기도 광명시', 
+                    20000000, 
+                    'Silver')
+
+홍길동.물품구매(시리얼, 2)
+print(홍길동.user_deposit)
+print(시리얼.product_count)
+
+장판수.물품구매(시리얼, 10)
+print(시리얼.product_count)
+
+print(시리얼)
+```
+
+    991100
+    18
+    8
+    품명:시리얼, 개수:8, 가격:8900
+
+
+
+```python
+class Product:
+    def __init__(self, 품명, 개수, 가격):
+        self.product_name = 품명
+        self.product_count = 개수
+        self.product_price = 가격
+    
+    def __str__(self):
+        return f'품명:{self.product_name}, 개수:{self.product_count}, 가격:{self.product_price}'
+
+시리얼 = Product('시리얼', 20, 8900)
+초코칩쿠키 = Product('초코칩쿠키', 30, 4300)
+칸쵸 = Product('칸쵸', 12, 1400)
+
+class UserInfo:
+    dataset = []
+
+    def __init__(self, 이름, 닉네임, 휴대폰번호, 생년월일, 주소, 예치금, 고객등급):      
+        self.user_name = 이름
+        self.nickname = 닉네임
+        self.user_phone = 휴대폰번호
+        self.user_birth = 생년월일
+        self.user_addr = 주소
+        self.user_deposit = 예치금
+        self.user_rank = 고객등급
+
+    def 물품구매(self, product, count):
+        self.user_deposit -= product.product_price
+        product.product_count -= count
+
+
+홍길동 = UserInfo(
+                    '홍길동', 
+                    '길동이', 
+                    '010-0000-0000', 
+                    '1993/10/10', 
+                    '경기도 광주시', 
+                    1000000, 
+                    'VIP')
+
+장판수 = UserInfo(
+                    '장판수', 
+                    '판자', 
+                    '010-1111-1111', 
+                    '1992/02/10', 
+                    '경기도 광명시', 
+                    20000000, 
+                    'Silver')
+
+홍길동.물품구매(시리얼, 2)
+print(홍길동.user_deposit)
+print(시리얼.product_count)
+
+장판수.물품구매(시리얼, 10)
+print(시리얼.product_count)
+
+print(시리얼)
+```
+
+
+```python
+print(chr(ord("生") & ord("死")))
+```
+
+    愛
+
+
+
+```python
+# 우리가 앞으로 알고리즘에서 할 코드입니다.
+# 예방주사 차원에서 진행하도록 하겠습니다.
+```
+
+
+```python
+# 아주 간단한 코드입니다.
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+노드1 = Node(10)
+노드2 = Node(20)
+노드3 = Node(30)
+
+# 노드1.data
+
+노드1.next = 노드2
+노드2.next = 노드3
+
+노드1.next.data # 노드2.data
+노드1.next.next.data # 노드2.next.data # 노드3.data
+```
+
+
+
+
+    30
+
+
+
+
+```python
+# 바름님 코드
+class Node:
+    dataset = []
+
+    def __init__(self, data1, data2):
+        self.data = [data1, data2]
+        self.next = None
+        self.dataset.append(self)
+
+node1 = Node(10,20)
+node2 = Node(20,30)
+node3 = Node(30,40)
+
+for i in range(len(node1.dataset)-1):
+    node1.dataset[i].next = node1.dataset[i+1]
+
+print(node1.data, node1.next.data, node1.next.next.data)
+```
+
+
+```python
+class Node:
+    def __init__(self, data1, data2):
+        self.data1 = data1
+        self.data2 = data2
+        self.next = None
+
+노드1 = Node(101,201)
+노드2 = Node(301,401)
+노드3 = Node(501,601)
+
+노드1.next = 노드2
+노드2.next = 노드3
+
+노드1.data1
+노드1.next.data1
+```
+
+
+
+
+    301
+
+
+
+### 메서드 오버라이딩
+
+* 부모 클래스에서 상속받은 함수를 자식 클래서에서 같은 이름으로 선언하여 사용하는 것
+
+
+```python
+class Car(object):
+    maxSpeed = 300
+    def move(self, x):
+        print(x, '의 스피드로 달리고 있습니다.')
+
+class HybridCar(Car):
+    battery = 1000
+
+class ElectricCar(HybridCar):
+    battery = 2000
+
+    def move(self, x):
+        print(x, '스피드로 달리고 있습니다.')
+
+car1 = ElectricCar()
+car1.move()
+```
+
+### 다중상속
+
+
+```python
+class Car(object):
+    maxSpeed = 300
+    def move(self, x):
+        print(x, '의 스피드로 달리고 있습니다.')
+
+class HybridCar(Car):
+    battery = 1000
+
+class ElectricCar(HybridCar):
+    battery = 2000
+
+    def move(self, x):
+        print(x, '스피드로 달리고 있습니다.')
+
+class Test(ElectricCar):
+    pass
+
+Test.mro() # MRO(Method Resolution Order)
+# print(Test.battery)
+```
+
+
+
+
+    [__main__.Test, __main__.ElectricCar, __main__.HybridCar, __main__.Car, object]
+
+
+
+
+```python
+class A(object):
+    maxSpeed = 300
+
+class B(A):
+    battery = 1000
+
+class C(A):
+    battery = 2000
+
+class D(C):
+    pass
+
+D.mro()
+# D.battery
+```
+
+
+
+
+    [__main__.D, __main__.C, __main__.A, object]
+
+
+
+
+```python
+class A(object):
+    maxSpeed = 300
+
+class B(A):
+    battery = 1000
+
+class C(A):
+    battery = 2000
+
+class D(B, C):
+    pass
+
+D.mro()
+# D.battery
+```
+
+
+
+
+    [__main__.D, __main__.B, __main__.C, __main__.A, object]
+
+
+
+
+```python
+# __는 문법 적으로 접근이 안됩니다. : 변수를 보호할 수 있어요.
+# 변수를 변경하는 것을 보다 엄격하게 관리할 수 있습니다.
+
+# _는 공식 X
+# _는 문법 적으로 접근이 됩니다.(회사 컨벤션마다 다릅니다.)
+
+class Car(object):
+    __maxSpeed = 300
+    maxPeople = 5
+    def move(self, x):
+        print(x, '의 스피드로 움직이고 있습니다.')
+        print(self.__maxSpeed, '가 최고 속도입니다.')
+    def stop(self):
+        print('멈췄습니다.')
+
+k5 = Car()
+k5.move(10)
+# k5.__maxSpeed #error
+# k5.maxPeople
+```
+
+    10 의 스피드로 움직이고 있습니다.
+    300 가 최고 속도입니다.
+
+
+## 이터레이터
+
+
+```python
+class MyIter:
+    def __init__(self, stop):
+        self.currentValue = 0
+        self.stop = stop
+    
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.currentValue >= self.stop:
+            raise StopIteration
+        self.currentValue += 1
+        return self.currentValue
+
+li = MyIter(5)
+for i in li:
+    print(i)
+```
+
+    1
+    2
+    3
+    4
+    5
+
+
+
+```python
+raise StopIteration
+```
+
+
+```python
+class MyIter:
+    def __init__(self, stop):
+        self.currentValue = 0
+        self.stop = stop
+    
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.currentValue >= self.stop:
+            raise StopIteration
+        result = self.currentValue
+        self.currentValue += 1
+        return result
+
+li = MyIter(5)
+for i in li:
+    print(i)
+
+for i in li:
+    print(i)
+```
+
+    0
+    1
+    2
+    3
+    4
+
+
+
+```python
+class MyIter:
+    def __init__(self, stop):
+        self.stop = stop
+    
+    def __iter__(self):
+        self.currentValue = 0
+        return self
+
+    def __next__(self):
+        if self.currentValue >= self.stop:
+            raise StopIteration
+        result = self.currentValue
+        self.currentValue += 1
+        return result
+
+li = MyIter(5)
+# for는 iter먼저 실행하고, next로 StopIteration
+for i in li:
+    print(i)
+
+for i in li:
+    print(i)
+```
+
+    0
+    1
+    2
+    3
+    4
+    0
+    1
+    2
+    3
+    4
+
+
+
+```python
+class MyIter:
+    def __init__(self, stop):
+        self.stop = stop
+    
+    def __iter__(self):
+        self.currentValue = 0
+        return self
+
+    def __next__(self):
+        if self.currentValue >= self.stop:
+            raise StopIteration
+        result = self.currentValue
+        self.currentValue += 1
+        return result
+
+li = MyIter(5)
+# for는 iter먼저 실행하고, next로 StopIteration
+i = iter(li)
+next(i)
+```
+
+
+
+
+    0
+
+
+
+
+```python
+next(i)
+```
+
+
+```python
+a, b, c, d = MyIter(4)
+print(a, b, c, d)
+```
+
+    0 1 2 3
+
+
+
+```python
+a, b, c, d = range(4)
+print(a, b, c, d)
+```
+
+    0 1 2 3
+
+
+## 제너레이터
+
+* 제너레이터란, 이터레이터를 생성해주는 함수
+
+
+```python
+def gen():
+    count = 0
+    while True:
+        yield count
+        count += 1
+
+
+for i in gen():
+    print(i)
+    if i == 10:
+        break
+```
+
+    0
+    1
+    2
+    3
+    4
+    5
+    6
+    7
+    8
+    9
+    10
+
+
+
+```python
+def gen():
+    count = 0
+    while True:
+        yield count
+        count += 2
+
+l = [10, 20, 30, 40, 50]
+list(zip(l, gen()))
+```
+
+
+
+
+    [(10, 0), (20, 2), (30, 4), (40, 6), (50, 8)]
+
+
+
+
+```python
+def gen():
+    count = 0
+    while True:
+        yield f'{count}주차'
+        count += 2
+과목 = ['HTML', 'CSS', 'JavaScript', 'Python']
+
+list(zip(과목, gen()))
+```
+
+
+
+
+    [('HTML', '0주차'), ('CSS', '2주차'), ('JavaScript', '4주차'), ('Python', '6주차')]
+
+
+
+
+```python
+def gen():
+    count = 1
+    while True:
+        yield count
+        count += 1
+        if count == 6:
+            count = 1
+과목 = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K']
+
+list(zip(과목, gen()))
+```
+
+
+
+
+    [('A', 1),
+     ('B', 2),
+     ('C', 3),
+     ('D', 4),
+     ('E', 5),
+     ('F', 1),
+     ('G', 2),
+     ('H', 3),
+     ('I', 4),
+     ('J', 5),
+     ('K', 1)]
+
+
+
+## 데코레이터 (데커레이터)
+
+
+```python
+# 아래와 같이 실무에서 활용됩니다.
+
+@login
+def 비밀게시판():
+    return render()
+
+@check_vip
+def vip용쿠폰():
+    return render()
+
+# 데이터 전처리 : 
+# 데이터에 이상치(이상한 값), 결측치(비어있는 값) 등을 처리
+# ['10', 1, 2, 3, '20'] -> [10, 1, 2, 3, 20]
+@데이터전처리
+sum(data)
+
+@데이터전처리후페센테이지
+sum(data)
+
+# [10, 20, 30] -> 60%
+```
+
+
+```python
+def one():
+    return lambda x, y: x + y
+
+더하기 = one()
+더하기(10, 10)
+```
+
+
+
+
+    20
+
+
+
+
+```python
+def one():
+    def two(x, y):
+        return x + y
+    return two
+
+더하기 = one()
+더하기(10, 10)
+```
+
+
+
+
+    20
+
+
+
+
+```python
+# 중요한 코드입니다.
+# 손으로 2 ~ 3번 써보시길 권해드립니다.
+def print_hello(func):
+    def wrap_func():
+        print('hello start')
+        func()
+        print('hello end')
+    return wrap_func
+
+@print_hello
+def func1():
+    print('func1 입니다.')
+
+func1()
+```
+
+    hello
+    func1 입니다.
+
+
+
+```python
+def 인사말(func):
+    def wrap_func():
+        print('안녕하세요.')
+        func()
+    return wrap_func
+
+@인사말
+def 자기소개1():
+    print('이호준입니다.')
+
+@인사말
+def 자기소개2():
+    print('홍길동입니다.')
+
+def 작별인사():
+    print('안녕히계세요.')
+
+자기소개1()
+자기소개2()
+작별인사()
+```
+
+    안녕하세요.
+    이호준입니다.
+    안녕하세요.
+    홍길동입니다.
+    안녕히계세요.
+
+
+
+```python
+def 인사말(func):
+    def wrap_func():
+        print('안녕하세요.')
+        func()
+    return wrap_func
+
+def 자기소개1():
+    print('이호준입니다.')
+
+def 자기소개2():
+    print('홍길동입니다.')
+
+def 작별인사():
+    print('안녕히계세요.')
+
+인사말(자기소개1)()
+인사말(자기소개2)()
+작별인사()
+```
+
+    안녕하세요.
+    이호준입니다.
+    안녕하세요.
+    홍길동입니다.
+    안녕히계세요.
+
+
+
+```python
+def 인사말(func):
+    def wrap_func(이름):
+        print('안녕하세요.')
+        func(이름)
+    return wrap_func
+
+@인사말
+def 자기소개1(name):
+    print(f'{name}입니다.')
+
+@인사말
+def 자기소개2(name):
+    print(f'{name}입니다.')
+
+def 작별인사():
+    print('안녕히계세요.')
+
+자기소개1('이호준')
+자기소개2('홍길동')
+작별인사()
+```
+
+
+```python
+def 인사말(func):
+    def wrap_func(이름):
+        print('안녕하세요.')
+        func(이름)
+    return wrap_func
+
+def 자기소개1(name):
+    print(f'{name}입니다.')
+
+def 자기소개2(name):
+    print(f'{name}입니다.')
+
+def 작별인사():
+    print('안녕히계세요.')
+
+인사말(자기소개1)('이호준')
+인사말(자기소개2)('홍길동')
+작별인사()
+```
+
+    안녕하세요.
+    이호준입니다.
+    안녕하세요.
+    홍길동입니다.
+    안녕히계세요.
+
+
+
+```python
+def 전처리(func):
+    def wrap_func(iterable):
+        iterable = list(map(int, iterable))
+        print(func(iterable))
+    return wrap_func
+
+@전처리
+def 평균(l):
+    return sum(l) / len(l)
+
+평균(['1', 2, 3, '4'])
+```
+
+    2.5
+
+
+
+```python
+def 전처리(func):
+    def wrap_func(iterable):
+        return func(list(map(int, iterable)))
+    return wrap_func
+
+@전처리
+def 평균(l):
+    return sum(l) / len(l)
+
+평균(['1', 2, 3, '4'])
+```
+
+
+
+
+    2.5
+
+
+
+
+```python
+def 전처리(func):
+    def wrap_func(iterable):
+        i = list(map(int, iterable))
+        calculate = func(i)
+        result = str(calculate) + '%'
+        return result
+    return wrap_func
+
+@전처리
+def 평균(l):
+    return sum(l) / len(l)
+
+평균(['1', 2, 3, '4'])
+```
+
+
+
+
+    '2.5%'
+
+
+
+
+```python
+# 데코레이터 실습 문제
+# 다음 값이 들어갔을 때, 숫자만 모두 더하는 코드를 완성하세요.
+li = ['10', True, False, '21', 0, 10, 20]
+
+@전처리
+def custom_sum(l):
+    sum(l)
+
+custom_sum(li)
+```
+
+
+```python
+# 코드리뷰는 여러분들과 분리하셔야 합니다.
+
+# 승현님 코드
+ls = ['10', True, False, '21', 0, 10, 20]
+
+def 전처리(func):
+    def wrap_func():
+        return sum(filter(lambda x: isinstance(x, int), ls))
+    return wrap_func
+
+@전처리
+def custom_sum():
+    pass
+    
+custom_sum()
+```
+
+
+
+
+    31
+
+
+
+
+```python
+# 준균님 코드
+def 전처리(func):
+    def wrap_func(iterable):
+        print(func([int(i) for i in iterable if str(i).isdigit() == True]))
+    return wrap_func
+
+@전처리
+def custom_sum(l):
+    return sum(l)
+    
+custom_sum(['10', True, False, '21', 0, 10, 20])
+```
+
+    61
+
+
+
+```python
+# 바름님 코드
+l = ['10', True, False, '21', 0, 10, 20]
+
+def 전처리(func):
+    def warp_func(iterable):
+        iterable = map(int, filter(lambda x: type(x) == int or type(x) == str, iterable))
+        return func(iterable)
+    return warp_func
+    
+@전처리
+def custom_sum(data):
+    return sum(data)
+
+print(custom_sum(l))
+```
+
+    61
+
+
+
+```python
+# 데코레이터에 argument를 넣는 방법
+def deco1(name):
+    def deco2(func):
+        def wrapper():
+            print('decorator1')
+            func()
+        return wrapper
+    return deco2
+ 
+# 데코레이터를 여러 개 지정
+@deco1('hojun')
+def hello():
+    print('hello')
+ 
+hello()
+```
+
+    decorator1
+    hello
+
+
+
+```python
+# 2중 decorator
+def decorator1(func):
+    def wrapper():
+        print(f'deco1 > wrapper > func : {id(func)}')
+        func()
+    print(f'deco1 > wrapper : {id(wrapper)}')
+    return wrapper
+ 
+def decorator2(func):
+    def wrapper():
+        print(f'deco2 > wrapper > func : {id(func)}')
+        func()
+    print(f'deco2 > wrapper : {id(wrapper)}')
+    return wrapper
+ 
+# 데코레이터를 여러 개 지정
+@decorator1
+@decorator2
+def hello():
+    print('hello')
+ 
+hello()
+```
+
+    deco2 > wrapper : 140658962986416
+    deco1 > wrapper : 140658962701552
+    deco1 > wrapper > func : 140658962986416
+    deco2 > wrapper > func : 140658962973744
+    hello
+
+
+
+```python
+id(decorator1), id(decorator2), id(hello)
+```
+
+
+
+
+    (139922952125840, 139922952126272, 139922950549520)
+
+
+
+## 모듈과 패키지
+
+
+```python
+# 연습1 (파일 1개 생성)
+# 현재 폴더에 test1.py 파일을 생성했고
+# name = 'leehojun'
+# age = 10
+
+# def hello():
+#     pass
+
+# class Human():
+#     pass
+```
+
+
+```python
+import test1
+
+print(test1.name)
+print(test1.hello())
+```
+
+    leehojun
+    None
+
+
+
+```python
+# 연습 2 (파일 2개 생성)
+# 주의!! 같은 이름이 있었을 경우
+# 마지막에 추가된 추가된 변수명으로 할당
+# import * 는 더더욱 포함시키는 변수, 메서드, 클래스 명을 알 수 없기에
+# 주의해서 사용해야 합니다.
+from test2 import name
+from test1 import name
+
+print(name)
+```
+
+    leehojun1
+
+
+
+```python
+# 연습 3 (폴더 > 파일 생성)
+# one이라는 것이 여기서는 폴더입니다!
+# two가 file 이름이에요.
+from one import two
+
+print(two.name)
+```
+
+    hello world
+
+
+
+```python
+# 연습 4 (폴더 > 폴더 > 파일 생성)
+# 런타임 재시작 하세요!
+from one.two import three
+
+print(three.name)
+```
+
+    hello world
+
+
+
+```python
+# 연습 5
+import test1 as t
+
+t.hello()
+```
+
+    hello world
+
+
+
+```python
+# Python에 모듈
+import pandas as pd
+import numpy as np
+```
+
+
+```python
+!mkdir leehojun
+```
+
+
+```python
+!pip install 패키지이름
+```
+
+
+```python
+!pip list # 실행 결과를 남겨드리고 싶으나 너무 길어 삭제
+```
+
+
+```python
+import random as rd #랜덤한 숫자 반환
+
+rd.randint(0, 10)
+```
+
+
+
+
+    4
+
+
+
+## 파일 입출력
+
+
+```python
+f = open('python.txt', 'w') # 파일모드 : r(read), w(write, 덮어씁니다.ㅜㅜ), a(append)
+f.close()
+```
+
+
+```python
+f = open('python.txt', 'w')
+s = 'hello\nworld'
+f.write(s)
+f.close()
+```
+
+
+```python
+# 문제 : 다음 입력을 통해 아래와 같은 출력 결과를 만드세요.
+# (모듈 써수 푸셔도 좋지만 가능하면 모듈을 안쓰고 풀어보시길 권해드립니다.)
+# 입력
+data1 = ['one', 'two', 'three']
+data2 = [10, 20, 30]
+# 출력
+'''
+{
+    "one" : 10,
+    "two" : 20,
+    "three" : 30
+}
+'''
+#코드
+f = open('data.json', 'w')
+s = str(dict(zip(data1,data2)))
+f.write(s)
+f.close()
+```
+
+
+```python
+import json
+# 입력
+data1 = ['one', 'two', 'three']
+data2 = [10, 20, 30]
+# 출력
+'''
+{
+    "one" : 10,
+    "two" : 20,
+    "three" : 30
+}
+'''
+#코드
+f = open('data.json', 'w')
+s = json.dumps(dict(zip(data1,data2)), indent=4)
+f.write(s)
+f.close()
+```
+
+
+```python
+# 정답에 근접하였으나 콤마가 없고
+# 띄어쓰기 4번이 안되어 있습니다.
+data1 = ['one', 'two', 'three']
+data2 = [10, 20, 30]
+
+'''
+{
+    "one" : 10,
+    "two" : 20,
+    "three" : 30
+}
+'''
+f = open('data.json', 'w')
+# 이 코드를 보면 다 덮어쓸 것 같지만 write할 때마다 append됩니다. w모드로 열어서도요.
+f.write('{\n')
+for elem in [f'"{d1}\" : {d2}' for d1, d2 in zip(data1, data2)]:
+    f.write(elem)
+    f.write('\n')
+f.write('}')
+f.close()
+```
+
+
+```python
+# 바름님 코드 (정답!)
+import json
+
+data1 = ['one', 'two', 'three']
+data2 = [10, 20, 30]
+'''
+{
+    "one" : 10,
+    "two" : 20,
+    "three" : 30
+}
+'''
+f = open('data.json', 'w')
+json.dump(dict(zip(data1,data2)),f,indent = '\t')
+f.close()
+```
+
+
+```python
+data1 = ['one', 'two', 'three']
+data2 = [10, 20, 30]
+
+### https://stackoverflow.com/a/3229493
+def pretty(d):
+    ret = "{\n"
+    for key, value in d.items():
+        ret += '\t' + str(key).replace("'", "\"") + ": "
+        ret += '\t' + str(value) + "\n"
+    ret += "}"
+    return ret
+
+res = dict(zip(data1, data2))
+stringed = str(res).replace("'", "\"")
+
+# print(pretty(res))
+
+f = open('data.json', 'w')
+f.write(pretty(res))
+f.close()
+```
+
+
+```python
+import json
+text = f'/////////////// 업데이트 방법 //////////////\n\
+// 1. 아래 데이터는 민감데이터로 크롤링에 의존하지 않는 데이터입니다.\n\
+//    긴급할 경우 아래 데이터만 수정하여 push 해주세요.\n\
+// 2. 크롤러_통합.py를 실행시키시고, 모두 push해주시면 됩니다.\n\
+//    크롤러_세계확진자.js, koreaRegionalData.js가 뽑힙니다.\n\
+// 3. 크롤러가 동작하지 않을 경우 수동업데이트해야 합니다.\n\
+////////////////////////////////////////////\n\
+// 존스홉킨스 : https://gisanddata.maps.arcgis.com/a\n\
+// https://www.worldometers.info/coronavirus/\n\
+// 질본 : http://ncov.mohw.go.kr/bdBoardLis\n\
+// 선차트용 데이터 - 제주도청 제공\n\
+var 입도객현황 = '
+
+data1 = ['one', 'two', 'three']
+data2 = [10, 20, 30]
+
+
+f = open('data.js', 'w')
+s = json.dumps(dict(zip(data1,data2)), indent=4)
+s = text + s
+f.write(s)
+f.close()
+```
+
+
+```python
+import json
+
+text = f'안내문구\nvar 입도객현황 = '
+
+data1 = ['one', 'two', 'three']
+data2 = [10, 20, 30]
+
+f = open('data.js', 'w')
+s = json.dumps(dict(zip(data1,data2)), indent=4)
+s = text + s
+f.write(s)
+f.close()
+```
+
+
+```python
+text = f'//안내문구\nvar 입도객현황 = '
+
+data1 = ['one', 'two', 'three']
+data2 = [10, 20, 30]
+
+f = open('data.js', 'w')
+s = str(dict(zip(data1,data2)))
+s = text + s
+f.write(s)
+f.close()
+```
+
+
+```python
+text = f'//안내문구\nvar 입도객현황 = '
+
+data1 = ['one', 'two', 'three',]
+data2 = [10, 20, 30,]
+
+f = open('data.js', 'w')
+s = str(data1)
+s = text + s
+f.write(s)
+f.close()
+```
+
+
+```python
+str(['one', 'two', 'three',])
+```
+
+
+
+
+    "['one', 'two', 'three']"
+
+
+
+## 파일 읽기
+
+* readline( ) : 라인 별로 읽습니다.
+
+
+```python
+f = open('python.txt', 'r')
+while True:
+    line = f.readline()
+    if not line:
+        break
+    print(line)
+f.close()
+```
+
+    hello
+    
+    world
+
+
+* readlines( ) : 전체 텍스트를 한꺼번에 읽어옵니다.
+
+
+```python
+f = open('python.txt', 'r')
+lines = f.readlines()
+for line in lines:
+    print(line)
+f.close()
+```
+
+* read( ) : 파일 전체 내용을 읽어옵니다.
+
+
+```python
+f = open('python.txt', 'r')
+data = f.read()
+print(data)
+f.close()
+```
+
+    hello
+    world
+
+
+
+```python
+# 개행이 2번 되었던 이유는 print 함수가 이미 개행 옵션을 가지고 있기 때문
+f = open('python.txt', 'r')
+lines = f.readlines()
+for line in lines:
+    print(line, end='')
+f.close()
+```
+
+    hello
+    world
+
+## 파일 입출력 심화 과정
+
+* github(https://github.com/paullabkorea/xlsxwriter) 에서 모든 소스코드를 다운로드 받으실 수 있습니다.
+* 무료책인 인공지능을 활용한 업무자동화 책(2021 Version Notion)을 활용하면 좀 더 활용성이 극대화된 코딩이 가능합니다.(크롤링, 워드파일 크롤링, PDF크롤링, 문자 보내기 등)
+* 업무자동화 Notion 링크 : https://paullabworkspace.notion.site/2021-6192ed4219fc4e7a96e10b22cfa27c80
+
+
+```python
+!pip3 install xlsxwriter
+```
+
+    Looking in indexes: https://pypi.org/simple, https://us-python.pkg.dev/colab-wheels/public/simple/
+    Collecting xlsxwriter
+      Downloading XlsxWriter-3.1.0-py3-none-any.whl (152 kB)
+    [2K     [90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[0m [32m152.7/152.7 kB[0m [31m3.7 MB/s[0m eta [36m0:00:00[0m
+    [?25hInstalling collected packages: xlsxwriter
+    Successfully installed xlsxwriter-3.1.0
+
+
+
+```python
+# openpyxl, xlrd, xlwt...
+# 다른 사용자가 만든 모듈
+```
+
+
+```python
+import xlsxwriter
+
+# 엑셀 파일 생성하기
+workbook = xlsxwriter.Workbook('test.xlsx')
+
+# 파일 안에 워크 시트 생성하기
+worksheet = workbook.add_worksheet('test')
+
+data = ['AA', 'BB', 'CC', 'DD']
+worksheet.write('A1', data[0])
+worksheet.write('B1', data[1])
+worksheet.write('C1', data[2])
+worksheet.write('D1', data[3])
+
+worksheet.write('A2', 1)
+worksheet.write('B2', 2)
+worksheet.write('C2', 3)
+worksheet.write('D2', 4)
+            #(행, 열, 데이터)
+worksheet.write(2, 0, 10)
+worksheet.write(2, 1, 20)
+worksheet.write(2, 2, 30)
+worksheet.write(2, 3, 40)
+
+workbook.close()
+```
+
+
+```python
+홍길동 = [33, 88, 24]
+이호준 = [34, 66, 77]
+김철수 = [78, 82, 36]
+```
+
+
+```python
+홍길동 = [33, 88, 24]
+이호준 = [34, 66, 77]
+김철수 = [78, 82, 36]
+
+workbook = xlsxwriter.Workbook('test.xlsx')
+worksheet = workbook.add_worksheet('test')
+
+l = ['이름', '국어', '영어', '수학', '평균']
+for i in range(5):
+    worksheet.write(0, i, l[i])
+
+worksheet.write(1, 0, '홍길동')
+for i in range(3):
+    worksheet.write(1, i+1, 홍길동[i])
+worksheet.write(1, 4, sum(홍길동) / len(홍길동))
+
+worksheet.write(2, 0, '이호준')
+for i in range(3):
+    worksheet.write(2, i+1, 이호준[i])
+worksheet.write(2, 4, sum(이호준) / len(이호준))
+
+worksheet.write(3, 0, '김철수')
+for i in range(3):
+    worksheet.write(3, i+1, 김철수[i])
+worksheet.write(3, 4, sum(김철수) / len(김철수))
+
+workbook.close()
+```
+
+
+```python
+홍길동 = [33, 88, 24]
+이호준 = [34, 66, 77]
+김철수 = [78, 82, 36]
+all_data = [홍길동, 이호준, 김철수]
+
+workbook = xlsxwriter.Workbook('test.xlsx')
+worksheet = workbook.add_worksheet('Grades')
+
+row_header = ['', '국어', '영어', '수학', '평균']
+col_header = ['', '홍길동', '이호준', '김철수']
+
+for idx, subject in enumerate(row_header):
+    worksheet.write(0, idx, subject)
+
+for idx, subject in enumerate(col_header):
+    worksheet.write(idx, 0, subject)
+
+for row_idx, line in enumerate(all_data):
+    for col_idx, value in enumerate(line):
+        worksheet.write(row_idx +1, col_idx + 1, value)
+    # average
+    avg = sum(line) / len(line)
+    worksheet.write(row_idx + 1, len(line) + 1, avg)
+
+workbook.close()
+```
+
+
+```python
+import xlsxwriter
+
+홍길동 = [33, 88, 24]
+이호준 = [34, 66, 77]
+김철수 = [78, 82, 36]
+
+workbook = xlsxwriter.Workbook('test.xlsx')
+worksheet = workbook.add_worksheet('test')
+
+worksheet.write(0, 0, '이름')
+worksheet.write(0, 1, '국어')
+worksheet.write(0, 2, '영어')
+worksheet.write(0, 3, '수학')
+
+worksheet.write(1, 0, '홍길동')
+worksheet.write(2, 0, '이호준')
+worksheet.write(3, 0, '김철수')
+
+for i in range(len(홍길동)):
+    worksheet.write(1, i+1, 홍길동[i])
+    worksheet.write(2, i+1, 이호준[i])
+    worksheet.write(3, i+1, 김철수[i])
+
+workbook.close()
+```
+
+
+```python
+# 배보다 배꼽이 더 큰지 꼭 확인 하세요.
+# 개발 시간 + 유지 보수
+```
+
+## OS 모듈
+
+
+```python
+import os
+
+os.getcwd() # os.getcwd() 함수는 현재 작업 디렉토리를 출력
+```
+
+
+
+
+    '/content'
+
+
+
+
+```python
+os.listdir() # 경로에 존재하는 파일과 디렉토리를 리스트로 반환할 때 사용
+```
+
+
+
+
+    ['.config',
+     'leehojun',
+     'test.xlsx',
+     'python.txt',
+     'test1.py',
+     '__pycache__',
+     'test2.py',
+     'data.js',
+     'data.json',
+     '.ipynb_checkpoints',
+     'one',
+     'sample_data']
+
+
+
+
+```python
+for i in os.listdir():
+    if len(i.split('.')) >= 2:
+        if i.split('.')[1] == 'py' or i.split('.')[1] == 'txt':
+            print(i)
+```
+
+    python.txt
+    test1.py
+    test2.py
+
+
+
+```python
+os.mkdir('hello') # 폴더를 생성할 일이 없습니다. # log 누적할 때
+```
+
+
+```python
+import glob
+
+glob.glob("*.py")
+```
+
+
+
+
+    ['test1.py', 'test2.py']
+
+
+
+## advanced 문제
+
+```python
+@writefile
+def add(a, b):
+    return a + b
+
+# writefile의 데코레이터 기능은 아래와 같은 형식으로 result.txt에 항상 저장되게 하는 것입니다.
+# {
+#     "a": 10,
+#     "b": 20,
+#     "a+b": 30
+# }
+```
+
+
+```python
+# 동건님 코드 : 문제는 없으나 add를 실행시키긴 해야합니다!
+# 데코레이터 => 아래 코드는 데코할 대상이 없는거에요.
+
+'''
+추가로 부연 설명을 합니다. :)
+스토리로 굳이 표현하자면 아래와 같습니다.
+
+1. add라는 함수를 내가 1년 전에 만들었다. 문제 없이 잘 작동하는 함수이다.
+2. 이 add를 데코레이터를 써서 파일 입출력이 되게 하고 싶다.
+3. 데코레이터를 만든다.
+4. 기존의 코드도 정상적으로 작동이 되어야 한다.
+'''
+
+import json
+
+def writerfile(func):
+    def wrapper(a, b):
+        data1 = ['a', 'b', 'a+b']
+        data2 = [a, b, a+b]
+        f = open('writerfile.json', 'w')
+        json.dump(dict(zip(data1,data2)), f, indent = 4)
+        f.close()
+    return wrapper
+
+@writerfile
+def add(a,b):
+    return a + b
+
+add(10, 20)
+```
+
+
+```python
+# 기존 코드
+def add(a,b):
+    return a + b
+
+result = add(10, 20) + add(10, 20)
+print(result)
+```
+
+
+```python
+import json
+
+def writerfile(func):
+    def wrapper(a, b):
+        data1 = ['a', 'b', 'a+b']
+        data2 = [a, b, a+b]
+        f = open('writerfile.json', 'w')
+        json.dump(dict(zip(data1,data2)), f, indent = 4)
+        f.close()
+        return func(a, b)
+    return wrapper
+
+@writerfile
+def add(a,b):
+    return a + b
+
+result = add(10, 20) + add(10, 20)
+print(result)
+```
+
+    60
+
+
+## !! 오늘 배운 것 정리
+* 제너레이터
+    * 제너레이터란, 이터레이터(순회 가능한 객체)를 생성해주는 함수
+    * 예제 1
+        ```python
+        def gen():
+            count = 0
+            while True:
+                yield count
+                count += 1
+        for i in gen():
+            print(i)
+            if i == 10:
+                break
+        ```
+* 데코레이터
+    * 함수 앞 뒤로 다른 역활을 해주는 기능을 붙이고 싶을 때 사용
+    * 코드 예
+        ```python
+        def print_hello(func):
+            def wrap_func():
+                print('hello start')
+                func()
+                print('hello end')
+            return wrap_func
+
+        @print_hello
+        def func1():
+            print('func1 입니다.')
+
+        func1()
+        ```
+
+* 파이썬 모듈
+    * 모듈 : 함수나 변수 또는 클래스를 모아 놓은 파이썬 파일
+    * 패키지 : 파이썬 모듈들을 계층적으로 관리
+    * 모듈 사용 예1
+    ```python
+    # 같은 폴더 내 test1.py
+    name = 'leehojun'
+    age = 10
+
+    def hello():
+        pass
+
+    class Human():
+        pass
+
+    # 같은 폴더 내 실행 파일
+    import test1
+
+    print(test1.name)
+    print(test1.hello())
+    ```
+    * 예2
+    ```python
+    # 연습 3 (폴더 > 파일 생성)
+    # one이라는 것이 여기서는 폴더입니다!
+    # two가 file 이름이에요.
+    from one import two
+
+    print(two.name)
+    ```
+    * 예3
+    ```python
+    # 연습 4 (폴더 > 폴더 > 파일 생성)
+    # 런타임 재시작 하세요!
+    from one.two import three
+
+    print(three.name)
+    ```
+
+* 파일 입출력
+    * 파일을 읽고 쓰는 것
+        * 파일 쓰기
+        ```python
+        f = open('python.txt', 'w') 
+        # 파일모드 : r(read), w(write, 처음부터 덮어씁니다.), a(append)
+        s = 'hello\nworld'
+        f.write(s)
+        f.close()
+        ```
+        * 파일 읽기
+        ```python
+        f = open('python.txt', 'r')
+        while True:
+            line = f.readline()
+            if not line:
+                break
+            print(line)
+        f.close()
+        ```
+        ```python
+        f = open('python.txt', 'r')
+        data = f.read()
+        print(data)
+        f.close()
+        ```
+
+## 파일 추가
+
+* 오늘 접속자 수 기초통계를 엑셀파일로 뽑아주는 기능을 만들어주세요.
+* 해당 엑셀을 PDF로 뽑는 기능도 만들어주세요.
 
 ## 클로저, 팩토리 함수
-
-## 제너레이터와 이터레이터
