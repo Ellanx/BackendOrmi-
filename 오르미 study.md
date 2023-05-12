@@ -14689,6 +14689,39 @@ f.close()
     hello
     world
 
+## 파일 내용 추가
+
+
+```python
+f = open('python.txt', 'w')
+s = ''
+for i in range(5):
+    s += f'{i}명 참여 중입니다. \n'
+f.write(s)
+f.close()
+```
+
+
+```python
+f = open('python.txt', 'a') # 다시 write 모드로 하면 처음부터 덮어 씁니다.
+s = ''
+for i in range(5, 11):
+    s += f'{i}명 참여 중입니다. \n'
+f.write(s)
+f.close()
+```
+
+* 파일이 계속 열려있는 상태가 유지
+* 메모리 효율
+
+## 파일 열기와 닫기를 동시에
+
+
+```python
+with open('test.txt', 'w') as f:
+	f.write('Life is too short, you need python')
+```
+
 ## 파일 입출력 심화 과정
 
 * github(https://github.com/paullabkorea/xlsxwriter) 에서 모든 소스코드를 다운로드 받으실 수 있습니다.
@@ -14973,6 +15006,9 @@ result = add(10, 20) + add(10, 20)
 print(result)
 ```
 
+    60
+
+
 
 ```python
 import json
@@ -15097,9 +15133,861 @@ print(result)
         f.close()
         ```
 
-## 파일 추가
+## Python Error
 
-* 오늘 접속자 수 기초통계를 엑셀파일로 뽑아주는 기능을 만들어주세요.
-* 해당 엑셀을 PDF로 뽑는 기능도 만들어주세요.
+* Python에서는 애러를 만나면 코드가(서비스가) 멈춥니다.
+* 여러분들이 짠 코드가 서비스에 영향이 끼쳐지지 않도록 시니어 분들이 견고한 코드를 작성해놨을 겁니다.
+* TDD, 테스트 주도 개발 등 Test를 할 수 있는 환경 등이 갖춰져 있습니다.
+* 작성한 코드는 실서비스로 바로 배포되지 않습니다. 작성한 코드는 테스트 서버로 일단 배포되서 잘 작동하는지 테스트 해봅니다.
+
+
+```python
+1 / 0
+```
+
+
+    ---------------------------------------------------------------------------
+
+    ZeroDivisionError                         Traceback (most recent call last)
+
+    <ipython-input-5-bc757c3fda29> in <cell line: 1>()
+    ----> 1 1 / 0
+    
+
+    ZeroDivisionError: division by zero
+
+
+
+```python
+for i in range(10)
+    print(i)
+```
+
+
+      File "<ipython-input-6-7a8a49ad5eea>", line 1
+        for i in range(10)
+                          ^
+    SyntaxError: expected ':'
+
+
+
+
+```python
+# Name Error
+print(x)
+```
+
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    <ipython-input-7-e9e3baa318b0> in <cell line: 2>()
+          1 # Name Error
+    ----> 2 print(x)
+    
+
+    NameError: name 'x' is not defined
+
+
+
+```python
+# Type Error
+x = 10
+y = '20'
+print(x + y)
+```
+
+
+    ---------------------------------------------------------------------------
+
+    TypeError                                 Traceback (most recent call last)
+
+    <ipython-input-8-62c7d5a446c2> in <cell line: 4>()
+          2 x = 10
+          3 y = '20'
+    ----> 4 print(x + y)
+    
+
+    TypeError: unsupported operand type(s) for +: 'int' and 'str'
+
+
+
+```python
+# Index Error
+my_list = [1, 2, 3]
+print(my_list[3])
+```
+
+
+    ---------------------------------------------------------------------------
+
+    IndexError                                Traceback (most recent call last)
+
+    <ipython-input-9-f79f21f7e49e> in <cell line: 3>()
+          1 # Index Error
+          2 my_list = [1, 2, 3]
+    ----> 3 print(my_list[3])
+    
+
+    IndexError: list index out of range
+
+
+
+```python
+# Key Error
+my_dict = {'a': 1, 'b': 2}
+print(my_dict['c'])
+```
+
+
+    ---------------------------------------------------------------------------
+
+    KeyError                                  Traceback (most recent call last)
+
+    <ipython-input-10-8f9ea626777a> in <cell line: 3>()
+          1 # Key Error
+          2 my_dict = {'a': 1, 'b': 2}
+    ----> 3 print(my_dict['c'])
+    
+
+    KeyError: 'c'
+
+
+
+```python
+# Value Error
+int('a')
+```
+
+
+    ---------------------------------------------------------------------------
+
+    ValueError                                Traceback (most recent call last)
+
+    <ipython-input-11-b8f9f0574b88> in <cell line: 2>()
+          1 # Value Error
+    ----> 2 int('a')
+    
+
+    ValueError: invalid literal for int() with base 10: 'a'
+
+
+
+```python
+# Attribute Error
+my_list = [1, 2, 3]
+print(my_list.appeend(4))
+```
+
+
+    ---------------------------------------------------------------------------
+
+    AttributeError                            Traceback (most recent call last)
+
+    <ipython-input-14-dceecff01ea8> in <cell line: 3>()
+          1 # Attribute Error
+          2 my_list = [1, 2, 3]
+    ----> 3 print(my_list.appeend(4))
+    
+
+    AttributeError: 'list' object has no attribute 'appeend'
+
+
+
+```python
+# Type Error
+def add(x, y):
+    return x + y
+
+add(1, 2, 3)
+```
+
+
+    ---------------------------------------------------------------------------
+
+    TypeError                                 Traceback (most recent call last)
+
+    <ipython-input-15-cbb8c8b9d43a> in <cell line: 5>()
+          3     return x + y
+          4 
+    ----> 5 add(1, 2, 3)
+    
+
+    TypeError: add() takes 2 positional arguments but 3 were given
+
+
+## 예외 처리
+
+
+```python
+try:
+    # 예외가 발생할 가능성이 있는 코드
+except:
+    # 예외 처리 코드
+```
+
+
+```python
+def div(a, b):
+    return a / b
+
+try:
+    div(1, 0)
+except:
+    print('예외 발생')
+```
+
+    예외 발생
+
+
+
+```python
+div(1, 0)
+```
+
+
+    ---------------------------------------------------------------------------
+
+    ZeroDivisionError                         Traceback (most recent call last)
+
+    <ipython-input-17-4267cdef819f> in <cell line: 1>()
+    ----> 1 div(1, 0)
+    
+
+    <ipython-input-16-6d8b9416aa45> in div(a, b)
+          1 def div(a, b):
+    ----> 2     return a / b
+          3 
+          4 try:
+          5     div(1, 0)
+
+
+    ZeroDivisionError: division by zero
+
+
+
+```python
+def div(a, b):
+    return a / b
+
+def f():
+    try:
+        return div(1, 0)
+    except:
+        print('예외 발생')
+
+result = f() + f() #result에는 float이 오길 기대하죠.
+print(result)
+```
+
+    예외 발생
+    예외 발생
+
+
+
+    ---------------------------------------------------------------------------
+
+    TypeError                                 Traceback (most recent call last)
+
+    <ipython-input-19-b48a77103e02> in <cell line: 10>()
+          8         print('예외 발생')
+          9 
+    ---> 10 result = f() + f() #result에는 float이 오길 기대하죠.
+         11 print(result)
+
+
+    TypeError: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+
+
+
+```python
+def div(a, b):
+    return a / b
+
+def f():
+    try:
+        return div(1, 0)
+    except:
+        return float('inf')
+
+result = f() + f() #result에는 float이 오길 기대하죠.
+print(result)
+```
+
+    inf
+
+
+
+```python
+def div(a, b):
+    return a / b
+
+def f():
+    try:
+        return div(1, 0)
+    except:
+        return None
+
+result = f() + f() #result에는 float이 오길 기대하죠.
+print(result)
+```
+
+
+    ---------------------------------------------------------------------------
+
+    TypeError                                 Traceback (most recent call last)
+
+    <ipython-input-21-6c7844611608> in <cell line: 10>()
+          8         return None
+          9 
+    ---> 10 result = f() + f() #result에는 float이 오길 기대하죠.
+         11 print(result)
+
+
+    TypeError: unsupported operand type(s) for +: 'NoneType' and 'NoneType'
+
+
+
+```python
+def div(a, b):
+    return a / b
+
+def f():
+    try:
+        return div(1, 0)
+    except:
+        return 0
+
+result = f() + f() #result에는 float이 오길 기대하죠.
+print(result)
+```
+
+    0
+
+
+
+```python
+try:
+    # 예외가 발생할 가능성이 있는 코드
+except:
+    # 예외 처리 코드
+else:
+    # 예외가 발생하지 않을 때 실행되는 코드
+```
+
+
+```python
+try:
+    1/0
+except:
+    print('예외 발생!')
+else:
+    print('정상 종료!')
+```
+
+    예외 발생!
+
+
+
+```python
+# while, for, try-except 구문에서 else는 언제 실행?
+# 정상 정료 되었을 때
+```
+
+
+```python
+try:
+    10/2
+except:
+    print('예외 발생!')
+else:
+    print('정상 종료!')
+```
+
+    정상 종료!
+
+
+
+```python
+# error가 나면 코드가 멈추기 때문에 보통 except와 함께 사용합니다.
+try:
+    # 예외가 발생할 가능성이 있는 코드
+finally:
+    # 예외 발생 여부와 상관없이 항상 실행되는 코드
+```
+
+
+```python
+try:
+    1/0
+finally:
+    print('finally')
+
+print('hello world')
+```
+
+    finally
+
+
+
+    ---------------------------------------------------------------------------
+
+    ZeroDivisionError                         Traceback (most recent call last)
+
+    <ipython-input-26-3c89f1d3cb5e> in <cell line: 1>()
+          1 try:
+    ----> 2     1/0
+          3 finally:
+          4     print('finally')
+          5 
+
+
+    ZeroDivisionError: division by zero
+
+
+
+```python
+try:
+    # 예외가 발생할 가능성이 있는 코드
+except:
+    # 예외 처리 코드
+finally:
+    # 예외 발생 여부와 상관없이 항상 실행되는 코드
+```
+
+
+```python
+try:
+    1/0
+except:
+    print('hello')
+finally:
+    print('world')
+```
+
+    hello
+    world
+
+
+
+```python
+try:
+    # 예외가 발생할 가능성이 있는 코드
+except:
+    # 예외 처리 코드
+else:
+    # 예외가 발생하지 않을 때 실행되는 코드
+finally:
+    # 예외 발생 여부와 상관없이 항상 실행되는 코드
+```
+
+
+```python
+try:
+    1/0
+except:
+    print('except')
+else:
+    print('else')
+finally:
+    print('finally')
+```
+
+
+```python
+try:
+    10/2
+except:
+    print('except')
+else:
+    print('else')
+finally:
+    print('finally')
+```
+
+    else
+    finally
+
+
+
+```python
+raise
+```
+
+
+    ---------------------------------------------------------------------------
+
+    RuntimeError                              Traceback (most recent call last)
+
+    <ipython-input-29-9c9a2cba73bf> in <cell line: 1>()
+    ----> 1 raise
+    
+
+    RuntimeError: No active exception to reraise
+
+
+
+```python
+# raise 애러이름
+raise ValueError
+```
+
+
+    ---------------------------------------------------------------------------
+
+    ValueError                                Traceback (most recent call last)
+
+    <ipython-input-30-ea8ffc0226cd> in <cell line: 2>()
+          1 # raise 애러이름
+    ----> 2 raise ValueError
+    
+
+    ValueError: 
+
+
+
+```python
+raise LeeHoJun
+```
+
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    <ipython-input-31-ab25c57c1073> in <cell line: 1>()
+    ----> 1 raise LeeHoJun
+    
+
+    NameError: name 'LeeHoJun' is not defined
+
+
+
+```python
+raise ValueError('코드를 잘~~ 만들어주세요.')
+```
+
+
+    ---------------------------------------------------------------------------
+
+    ValueError                                Traceback (most recent call last)
+
+    <ipython-input-32-805fbfed3b7d> in <cell line: 1>()
+    ----> 1 raise ValueError('코드를 잘~~ 만들어주세요.')
+    
+
+    ValueError: 코드를 잘~~ 만들어주세요.
+
+
+
+```python
+try:
+    1/0
+except ValueError:
+    print('ValueError')
+except ZeroDivisionError:
+    print('ZeroDivisionError')
+
+print(ZeroDivisionError)
+print(type(ZeroDivisionError))
+print(dir(ZeroDivisionError))
+```
+
+    ZeroDivisionError
+    <class 'ZeroDivisionError'>
+    <class 'type'>
+    ['__cause__', '__class__', '__context__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__le__', '__lt__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__setstate__', '__sizeof__', '__str__', '__subclasshook__', '__suppress_context__', '__traceback__', 'args', 'with_traceback']
+
+
+
+```python
+class Leehojun(Exception): #Exception을 상속받으면 됩니다.
+    def __init__(self):
+        super().__init__('입력된 값이 leehojun이 아닙니다.')
+
+if 'leehojun' != input():
+    raise Leehojun
+else:
+    print('leehojun이 맞습니다!')
+```
+
+    adsf
+
+
+
+    ---------------------------------------------------------------------------
+
+    Leehojun                                  Traceback (most recent call last)
+
+    <ipython-input-37-4297290162e2> in <cell line: 5>()
+          4 
+          5 if 'leehojun' != input():
+    ----> 6     raise Leehojun
+          7 else:
+          8     print('leehojun이 맞습니다!')
+
+
+    Leehojun: 입력된 값이 leehojun이 아닙니다.
+
+
+
+```python
+!pip list
+```
+
+
+```python
+import sys
+
+sys.path
+```
+
+
+
+
+    ['/content',
+     '/env/python',
+     '/usr/lib/python310.zip',
+     '/usr/lib/python3.10',
+     '/usr/lib/python3.10/lib-dynload',
+     '',
+     '/usr/local/lib/python3.10/dist-packages',
+     '/usr/lib/python3/dist-packages',
+     '/usr/local/lib/python3.10/dist-packages/IPython/extensions',
+     '/root/.ipython']
+
+
+
+
+```python
+l = []
+for i in [[10, 5], [20, 3], [30, 4], [40, 1]]:
+    l.append(i[0] - i[1])
+l
+```
+
+
+
+
+    [5, 17, 26, 39]
+
+
+
+
+```python
+l = []
+for i, j in [[10, 5], [20, 3], [30, 4], [40, 1]]:
+    l.append(i - j)
+l
+```
+
+
+
+
+    [5, 17, 26, 39]
+
+
+
+
+```python
+l = [i - j for i, j in [[10, 5], [20, 3], [30, 4], [40, 1]]]
+l
+```
+
+
+
+
+    [5, 17, 26, 39]
+
+
+
+
+```python
+l = [[10, 5], [20, 3], [30, 4], [40, 1]]
+map(lambda x: x[0]-x[1], l)
+```
+
+
+```python
+s = 0
+for i in '11123':
+    s += int(i)
+s
+```
+
+
+
+
+    8
+
+
+
+
+```python
+[int(i) for i in '11123']
+```
+
+
+
+
+    [1, 1, 1, 2, 3]
+
+
+
+
+```python
+sum([int(i) for i in '11123'])
+```
+
+
+
+
+    8
+
+
+
+
+```python
+list(map(int, '11123'))
+```
+
+
+
+
+    [1, 1, 1, 2, 3]
+
+
+
+
+```python
+sum(map(int, '11123'))
+```
+
+
+
+
+    8
+
+
+
+
+```python
+list('11123')
+```
+
+
+
+
+    ['1', '1', '1', '2', '3']
+
+
+
+
+```python
+'!hello!wor     ld!     '.replace('!', '')
+```
+
+
+
+
+    'hellowor     ld     '
+
+
+
+
+```python
+'!hello!wor     ld!     '.replace('!', '').strip()
+```
+
+
+
+
+    'hellowor     ld'
+
+
+
+
+```python
+'!hello!wor     ld!     '.replace('!', '').replace(' ', '')
+```
+
+
+
+
+    'helloworld'
+
+
 
 ## 클로저, 팩토리 함수
+
+
+```python
+def one():
+    def two():
+        return
+    return two
+
+hello = one() # hello == two
+```
+
+
+```python
+def one(x):
+    def two():
+        return x + x
+    return two
+
+hello = one(10) # hello == two
+hello() # hello() == two()
+```
+
+
+
+
+    20
+
+
+
+
+```python
+def one(x):
+    def two(a, b):
+        return a + b + x
+    return two
+
+hello = one(10) # hello == two
+hello(2, 3) # hello() == two()
+```
+
+
+```python
+def user(username, usermoney):
+    def userbuy(productname, productprice):
+        leftmoney = usermoney - productprice
+        return f'{productname}를 {username}님이 구매하셔서 계좌에 {leftmoney}가 남아있습니다.'
+    return userbuy
+
+이호준구매 = user('leehojun', 1000000)
+이호준구매('자전거', 100000)
+
+홍길동구매 = user('hongildong', 1000000)
+홍길동구매('킥보드', 50000)
+
+# 이호준구매와 홍길동구매 함수를 가지고 계좌를 조작할 수 있나요?
+# 계좌 변수에 접근할 수 있나요?
+```
+
+
+
+
+    '킥보드를 hongildong님이 구매하셔서 계좌에 950000가 남아있습니다.'
+
+
+
+
+```python
+# S은행에 입사를 했습니다. 여러분들의 권한은 이호준구매 등에 구매함수만 조작할 수 있습니다
+# 이렇게 되면 계좌 정보를 접근할 수가 없겠죠?
+# 접근 통제, 제한, 변수 보호 등으로 사용합니다.
+```
