@@ -243,3 +243,21 @@ function solution(my_string) {
         .map(v => v * 1)
         .sort((a, b) => a - b);
 }
+
+
+## 과제 
+
+전체 product의 갯수와 price
+전체 가격의 평균을 구해주세요.
+
+fetch('http://test.api.weniv.co.kr/mall')
+    .then(data=>data.json())
+    .then(data=> {
+        let total_price = 0
+        let product_count = data.length
+        for (const i of data) {
+            total_price += i.price 
+        }
+        console.log(product_count)
+        console.log(total_price/product_count)
+    })
